@@ -64,7 +64,7 @@
         }
         .game-item:hover { border-color: #ffb34788; background: linear-gradient(135deg, #111120, #080812); }
 
-        /* Logo del juego */
+        /* Logo del juego (carátula) */
         .game-logo { 
             width: 70px; 
             height: 70px; 
@@ -151,45 +151,47 @@
 </div>
 
 <script>
-    // ================== CATÁLOGO DE JUEGOS (con Super Mario Kart añadido) ==================
+    // ================== CATÁLOGO DE JUEGOS CON RUTAS DE CARÁTULAS ABSOLUTAS ==================
+    // Las rutas de las carátulas apuntan a la carpeta /La-Taberna-De-La-Emulacion/roms/.../boxart/
+    // Asegúrate de que las imágenes PNG estén en esas ubicaciones dentro de tu repositorio.
     const juegosDB = [
         // NES
-        { nombre: "Super Mario Bros.", sistema: "nes", romPath: "roms/nes/super_mario_bros.nes", logoUrl: "https://placehold.co/100x100/1e293b/ffb347?text=SMB" },
-        { nombre: "The Legend of Zelda", sistema: "nes", romPath: "roms/nes/zelda.nes", logoUrl: "https://placehold.co/100x100/1e293b/ffb347?text=Zelda" },
-        { nombre: "Mega Man 2", sistema: "nes", romPath: "roms/nes/megaman2.nes", logoUrl: "https://placehold.co/100x100/1e293b/ffb347?text=MM2" },
-        { nombre: "Castlevania", sistema: "nes", romPath: "roms/nes/castlevania.nes", logoUrl: "https://placehold.co/100x100/1e293b/ffb347?text=CV" },
-        { nombre: "Metroid", sistema: "nes", romPath: "roms/nes/metroid.nes", logoUrl: "https://placehold.co/100x100/1e293b/ffb347?text=Metroid" },
-        // SNES (incluye Super Mario Kart)
-        { nombre: "Super Mario World", sistema: "snes", romPath: "roms/snes/smw.sfc", logoUrl: "https://placehold.co/100x100/1e293b/ffb347?text=SMW" },
-        { nombre: "Zelda: A Link to the Past", sistema: "snes", romPath: "roms/snes/zelda_snes.sfc", logoUrl: "https://placehold.co/100x100/1e293b/ffb347?text=Zelda" },
-        { nombre: "Super Metroid", sistema: "snes", romPath: "roms/snes/super_metroid.sfc", logoUrl: "https://placehold.co/100x100/1e293b/ffb347?text=Metroid" },
-        { nombre: "Chrono Trigger", sistema: "snes", romPath: "roms/snes/chrono.sfc", logoUrl: "https://placehold.co/100x100/1e293b/ffb347?text=CT" },
-        { nombre: "Super Mario Kart", sistema: "snes", romPath: "roms/snes/super_mario_kart.sfc", logoUrl: "https://placehold.co/100x100/1e293b/ffb347?text=MKart" },
+        { nombre: "Super Mario Bros.", sistema: "nes", romPath: "roms/nes/super_mario_bros.nes", logoUrl: "/La-Taberna-De-La-Emulacion/roms/nes/boxart/super_mario_bros.png" },
+        { nombre: "The Legend of Zelda", sistema: "nes", romPath: "roms/nes/zelda.nes", logoUrl: "/La-Taberna-De-La-Emulacion/roms/nes/boxart/zelda.png" },
+        { nombre: "Mega Man 2", sistema: "nes", romPath: "roms/nes/megaman2.nes", logoUrl: "/La-Taberna-De-La-Emulacion/roms/nes/boxart/megaman2.png" },
+        { nombre: "Castlevania", sistema: "nes", romPath: "roms/nes/castlevania.nes", logoUrl: "/La-Taberna-De-La-Emulacion/roms/nes/boxart/castlevania.png" },
+        { nombre: "Metroid", sistema: "nes", romPath: "roms/nes/metroid.nes", logoUrl: "/La-Taberna-De-La-Emulacion/roms/nes/boxart/metroid.png" },
+        // SNES
+        { nombre: "Super Mario World", sistema: "snes", romPath: "roms/snes/smw.sfc", logoUrl: "/La-Taberna-De-La-Emulacion/roms/snes/boxart/smw.png" },
+        { nombre: "Zelda: A Link to the Past", sistema: "snes", romPath: "roms/snes/zelda_snes.sfc", logoUrl: "/La-Taberna-De-La-Emulacion/roms/snes/boxart/zelda_snes.png" },
+        { nombre: "Super Metroid", sistema: "snes", romPath: "roms/snes/super_metroid.sfc", logoUrl: "/La-Taberna-De-La-Emulacion/roms/snes/boxart/super_metroid.png" },
+        { nombre: "Chrono Trigger", sistema: "snes", romPath: "roms/snes/chrono.sfc", logoUrl: "/La-Taberna-De-La-Emulacion/roms/snes/boxart/chrono.png" },
+        { nombre: "Super Mario Kart", sistema: "snes", romPath: "roms/snes/super_mario_kart.sfc", logoUrl: "/La-Taberna-De-La-Emulacion/roms/snes/boxart/super_mario_kart.png" },
         // Game Boy
-        { nombre: "Pokémon Red", sistema: "gb", romPath: "roms/gb/pokemon_red.gb", logoUrl: "https://placehold.co/100x100/1e293b/ffb347?text=Pokemon" },
-        { nombre: "The Legend of Zelda: Link's Awakening", sistema: "gb", romPath: "roms/gb/zelda_dx.gb", logoUrl: "https://placehold.co/100x100/1e293b/ffb347?text=Zelda" },
+        { nombre: "Pokémon Red", sistema: "gb", romPath: "roms/gb/pokemon_red.gb", logoUrl: "/La-Taberna-De-La-Emulacion/roms/gb/boxart/pokemon_red.png" },
+        { nombre: "The Legend of Zelda: Link's Awakening", sistema: "gb", romPath: "roms/gb/zelda_dx.gb", logoUrl: "/La-Taberna-De-La-Emulacion/roms/gb/boxart/zelda_dx.png" },
         // Game Boy Color
-        { nombre: "Pokémon Crystal", sistema: "gbc", romPath: "roms/gbc/crystal.gbc", logoUrl: "https://placehold.co/100x100/1e293b/ffb347?text=Crystal" },
-        { nombre: "Metal Gear Solid", sistema: "gbc", romPath: "roms/gbc/mgs.gbc", logoUrl: "https://placehold.co/100x100/1e293b/ffb347?text=MGS" },
+        { nombre: "Pokémon Crystal", sistema: "gbc", romPath: "roms/gbc/crystal.gbc", logoUrl: "/La-Taberna-De-La-Emulacion/roms/gbc/boxart/crystal.png" },
+        { nombre: "Metal Gear Solid", sistema: "gbc", romPath: "roms/gbc/mgs.gbc", logoUrl: "/La-Taberna-De-La-Emulacion/roms/gbc/boxart/mgs.png" },
         // Game Boy Advance
-        { nombre: "Metroid Fusion", sistema: "gba", romPath: "roms/gba/fusion.gba", logoUrl: "https://placehold.co/100x100/1e293b/ffb347?text=Fusion" },
-        { nombre: "Castlevania: Aria of Sorrow", sistema: "gba", romPath: "roms/gba/aria.gba", logoUrl: "https://placehold.co/100x100/1e293b/ffb347?text=Aria" },
-        { nombre: "Mario Kart Super Circuit", sistema: "gba", romPath: "roms/gba/mkart.gba", logoUrl: "https://placehold.co/100x100/1e293b/ffb347?text=MK" },
+        { nombre: "Metroid Fusion", sistema: "gba", romPath: "roms/gba/fusion.gba", logoUrl: "/La-Taberna-De-La-Emulacion/roms/gba/boxart/fusion.png" },
+        { nombre: "Castlevania: Aria of Sorrow", sistema: "gba", romPath: "roms/gba/aria.gba", logoUrl: "/La-Taberna-De-La-Emulacion/roms/gba/boxart/aria.png" },
+        { nombre: "Mario Kart Super Circuit", sistema: "gba", romPath: "roms/gba/mkart.gba", logoUrl: "/La-Taberna-De-La-Emulacion/roms/gba/boxart/mkart.png" },
         // N64
-        { nombre: "Super Mario 64", sistema: "n64", romPath: "roms/n64/sm64.zip", logoUrl: "https://placehold.co/100x100/1e293b/ffb347?text=SM64" },
-        { nombre: "The Legend of Zelda: Ocarina of Time", sistema: "n64", romPath: "roms/n64/oot.zip", logoUrl: "https://placehold.co/100x100/1e293b/ffb347?text=OoT" },
-        { nombre: "Mario Kart 64", sistema: "n64", romPath: "roms/n64/mk64.zip", logoUrl: "https://placehold.co/100x100/1e293b/ffb347?text=MK64" },
+        { nombre: "Super Mario 64", sistema: "n64", romPath: "roms/n64/sm64.zip", logoUrl: "/La-Taberna-De-La-Emulacion/roms/n64/boxart/sm64.png" },
+        { nombre: "The Legend of Zelda: Ocarina of Time", sistema: "n64", romPath: "roms/n64/oot.zip", logoUrl: "/La-Taberna-De-La-Emulacion/roms/n64/boxart/oot.png" },
+        { nombre: "Mario Kart 64", sistema: "n64", romPath: "roms/n64/mk64.zip", logoUrl: "/La-Taberna-De-La-Emulacion/roms/n64/boxart/mk64.png" },
         // Sega Mega Drive (Genesis)
-        { nombre: "Sonic the Hedgehog", sistema: "genesis", romPath: "roms/genesis/sonic.bin", logoUrl: "https://placehold.co/100x100/1e293b/ffb347?text=Sonic" },
-        { nombre: "Streets of Rage 2", sistema: "genesis", romPath: "roms/genesis/streets2.bin", logoUrl: "https://placehold.co/100x100/1e293b/ffb347?text=SOR2" },
-        { nombre: "Gunstar Heroes", sistema: "genesis", romPath: "roms/genesis/gunstar.bin", logoUrl: "https://placehold.co/100x100/1e293b/ffb347?text=Gunstar" },
-        { nombre: "Mortal Kombat II", sistema: "genesis", romPath: "roms/genesis/mk2.bin", logoUrl: "https://placehold.co/100x100/1e293b/ffb347?text=MK2" },
+        { nombre: "Sonic the Hedgehog", sistema: "genesis", romPath: "roms/genesis/sonic.bin", logoUrl: "/La-Taberna-De-La-Emulacion/roms/genesis/boxart/sonic.png" },
+        { nombre: "Streets of Rage 2", sistema: "genesis", romPath: "roms/genesis/streets2.bin", logoUrl: "/La-Taberna-De-La-Emulacion/roms/genesis/boxart/streets2.png" },
+        { nombre: "Gunstar Heroes", sistema: "genesis", romPath: "roms/genesis/gunstar.bin", logoUrl: "/La-Taberna-De-La-Emulacion/roms/genesis/boxart/gunstar.png" },
+        { nombre: "Mortal Kombat II", sistema: "genesis", romPath: "roms/genesis/mk2.bin", logoUrl: "/La-Taberna-De-La-Emulacion/roms/genesis/boxart/mk2.png" },
         // Sega CD
-        { nombre: "Sonic CD", sistema: "segacd", romPath: "roms/segacd/soniccd.zip", logoUrl: "https://placehold.co/100x100/1e293b/ffb347?text=SonicCD" },
-        { nombre: "Lunar: Eternal Blue", sistema: "segacd", romPath: "roms/segacd/lunar.zip", logoUrl: "https://placehold.co/100x100/1e293b/ffb347?text=Lunar" },
+        { nombre: "Sonic CD", sistema: "segacd", romPath: "roms/segacd/soniccd.zip", logoUrl: "/La-Taberna-De-La-Emulacion/roms/segacd/boxart/soniccd.png" },
+        { nombre: "Lunar: Eternal Blue", sistema: "segacd", romPath: "roms/segacd/lunar.zip", logoUrl: "/La-Taberna-De-La-Emulacion/roms/segacd/boxart/lunar.png" },
         // Sega 32X
-        { nombre: "Knuckles' Chaotix", sistema: "sega32x", romPath: "roms/32x/chaotix.32x", logoUrl: "https://placehold.co/100x100/1e293b/ffb347?text=Chaotix" },
-        { nombre: "Virtua Racing", sistema: "sega32x", romPath: "roms/32x/vracing.32x", logoUrl: "https://placehold.co/100x100/1e293b/ffb347?text=Virtua" }
+        { nombre: "Knuckles' Chaotix", sistema: "sega32x", romPath: "roms/32x/chaotix.32x", logoUrl: "/La-Taberna-De-La-Emulacion/roms/32x/boxart/chaotix.png" },
+        { nombre: "Virtua Racing", sistema: "sega32x", romPath: "roms/32x/vracing.32x", logoUrl: "/La-Taberna-De-La-Emulacion/roms/32x/boxart/vracing.png" }
     ];
 
     // Información de consolas (iconos y nombres)
@@ -205,7 +207,7 @@
         sega32x: { nombre: "SEGA 32X", icono: "fas fa-microchip", color: "#ff6b6b" }
     };
 
-    // Función para obtener la URL base correcta
+    // Función para obtener la URL base correcta (para las ROMs)
     function getBaseUrl() {
         let path = window.location.pathname;
         if (path.includes('/') && !path.endsWith('/')) {
@@ -400,7 +402,7 @@
         });
     });
 
-    console.log("La Taberna de la Emulación está lista con optimizaciones de rendimiento. ¡Que disfrutes!");
+    console.log("La Taberna de la Emulación está lista. Las carátulas se cargan desde /La-Taberna-De-La-Emulacion/roms/.../boxart/");
 </script>
 </body>
 </html>
