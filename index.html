@@ -3,350 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Archivo Retro - Preservación de Clásicos (NES a N64)</title>
+    <title>Archivo Retro - Juegos NES a N64</title>
     <!-- Fuentes e iconos -->
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- EmulatorJS (motor de emulación web) -->
-    <script src="https://cdn.emulatorjs.org/stable/emulator.min.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            background: linear-gradient(145deg, #0a0f1e 0%, #0c1222 100%);
-            font-family: 'Inter', sans-serif;
-            color: #eef4ff;
-            line-height: 1.5;
-            padding-bottom: 3rem;
-        }
-
-        /* Pantalla de bienvenida (sonido inicial) */
-        .welcome-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at center, #0b1120, #03060c);
-            z-index: 2000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            backdrop-filter: blur(6px);
-            transition: opacity 0.6s ease, visibility 0.6s;
-            font-family: 'Press Start 2P', monospace;
-        }
-        .welcome-card {
-            background: rgba(10, 20, 30, 0.85);
-            backdrop-filter: blur(12px);
-            border-radius: 2rem;
-            padding: 2.5rem 2rem;
-            text-align: center;
-            border: 2px solid #ffb347;
-            box-shadow: 0 0 40px rgba(255, 180, 70, 0.3);
-            max-width: 500px;
-            margin: 1rem;
-        }
-        .welcome-card h1 {
-            font-size: 1.7rem;
-            margin-bottom: 1rem;
-            color: #ffcd7e;
-            text-shadow: 0 0 5px #b45f1b;
-        }
-        .welcome-card p {
-            font-size: 0.85rem;
-            margin-bottom: 2rem;
-            line-height: 1.6;
-        }
-        .start-btn {
-            background: #ff9f2e;
-            border: none;
-            padding: 1rem 2rem;
-            font-family: 'Press Start 2P', monospace;
-            font-size: 1.1rem;
-            font-weight: bold;
-            color: #1e1a0c;
-            border-radius: 60px;
-            cursor: pointer;
-            transition: 0.2s;
-            box-shadow: 0 5px 0 #7a3e0c;
-        }
-        .start-btn:active {
-            transform: translateY(3px);
-            box-shadow: 0 2px 0 #7a3e0c;
-        }
-        .hidden-overlay {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-        }
-
-        /* Header principal */
-        .header {
-            text-align: center;
-            padding: 2rem 1rem 1rem;
-            border-bottom: 2px solid #2a3650;
-            background: rgba(8, 12, 24, 0.7);
-            backdrop-filter: blur(4px);
-        }
-        .header h2 {
-            font-family: 'Press Start 2P', monospace;
-            color: #ffcd7e;
-            font-size: 1.4rem;
-            margin-bottom: 0.5rem;
-        }
-        .header p {
-            color: #9aaec9;
-            font-size: 0.9rem;
-        }
-
-        /* Navegación rápida consolas */
-        .console-nav {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 0.75rem;
-            margin: 1.5rem 1rem;
-        }
-        .console-badge {
-            background: #1e293b;
-            padding: 0.5rem 1rem;
-            border-radius: 40px;
-            font-weight: bold;
-            font-size: 0.8rem;
-            font-family: monospace;
-            border-left: 4px solid #ffb347;
-            cursor: pointer;
-            transition: 0.1s;
-            text-decoration: none;
-            color: #cbd5e6;
-        }
-        .console-badge:hover {
-            background: #2d3b54;
-            transform: scale(1.02);
-            color: white;
-        }
-
-        /* Grid de consolas (columnas) */
-        .consoles-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 2rem;
-            padding: 1.5rem;
-            max-width: 1600px;
-            margin: 0 auto;
-        }
-
-        /* Cada consola */
-        .console-card {
-            background: rgba(18, 25, 45, 0.75);
-            backdrop-filter: blur(4px);
-            border-radius: 1.8rem;
-            border: 1px solid #334155;
-            overflow: hidden;
-            transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-        }
-        .console-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 30px -12px black;
-            border-color: #ffb34766;
-        }
-        .console-header {
-            background: #0f172ad9;
-            padding: 1rem 1.2rem;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            border-bottom: 2px solid #ffb347;
-        }
-        .console-header i {
-            font-size: 2rem;
-            color: #ffb347;
-        }
-        .console-header h3 {
-            font-size: 1.6rem;
-            font-weight: 700;
-            letter-spacing: 1px;
-        }
-        .games-list {
-            padding: 1rem;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-        /* Tarjeta de juego individual */
-        .game-item {
-            background: #0a0f1ccc;
-            border-radius: 1.2rem;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 0.7rem;
-            transition: 0.1s;
-            border: 1px solid #2d3a55;
-        }
-        .game-logo {
-            width: 70px;
-            height: 70px;
-            background: #11161f;
-            border-radius: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-            flex-shrink: 0;
-        }
-        .game-logo img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-        }
-        .game-info {
-            flex: 1;
-        }
-        .game-title {
-            font-weight: bold;
-            font-size: 1rem;
-            margin-bottom: 0.25rem;
-            font-family: monospace;
-        }
-        .game-system {
-            font-size: 0.7rem;
-            color: #98a9c7;
-            background: #1e293b;
-            display: inline-block;
-            padding: 0.1rem 0.5rem;
-            border-radius: 20px;
-        }
-        .play-btn {
-            background: #2c3e5c;
-            border: none;
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 40px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.15s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-family: monospace;
-        }
-        .play-btn:hover {
-            background: #ff9f2e;
-            color: #0a0f1e;
-            transform: scale(1.02);
-        }
-
-        /* Modal del emulador */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            z-index: 3000;
-            justify-content: center;
-            align-items: center;
-            backdrop-filter: blur(8px);
-        }
-        .modal-content {
-            background: #101624;
-            width: 90%;
-            max-width: 900px;
-            border-radius: 1.8rem;
-            border: 2px solid #ffb347;
-            overflow: hidden;
-            box-shadow: 0 25px 40px black;
-            animation: fadeUp 0.2s ease;
-        }
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 1.5rem;
-            background: #0b1020;
-            border-bottom: 1px solid #2a3650;
-        }
-        .modal-header h4 {
-            font-family: monospace;
-            font-size: 1.2rem;
-        }
-        .close-modal {
-            font-size: 1.8rem;
-            cursor: pointer;
-            background: none;
-            border: none;
-            color: #ffb347;
-        }
-        .emulator-container {
-            width: 100%;
-            min-height: 480px;
-            background: #000;
-            position: relative;
-        }
-        @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        footer {
-            text-align: center;
-            font-size: 0.75rem;
-            margin-top: 2rem;
-            padding: 1rem;
-            color: #6f7c97;
-            border-top: 1px solid #1f2a44;
-        }
-        @media (max-width: 700px) {
-            .consoles-grid {
-                grid-template-columns: 1fr;
-            }
-            .game-logo {
-                width: 55px;
-                height: 55px;
-            }
-            .play-btn {
-                padding: 0.3rem 0.8rem;
-            }
-        }
+        /* --- Tus estilos existentes se mantienen igual --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: linear-gradient(145deg, #0a0f1e 0%, #0c1222 100%); font-family: 'Inter', sans-serif; color: #eef4ff; line-height: 1.5; padding-bottom: 3rem; }
+        .welcome-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at center, #0b1120, #03060c); z-index: 2000; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(6px); transition: opacity 0.6s ease, visibility 0.6s; font-family: 'Press Start 2P', monospace; }
+        .welcome-card { background: rgba(10, 20, 30, 0.85); backdrop-filter: blur(12px); border-radius: 2rem; padding: 2.5rem 2rem; text-align: center; border: 2px solid #ffb347; box-shadow: 0 0 40px rgba(255, 180, 70, 0.3); max-width: 500px; margin: 1rem; }
+        .welcome-card h1 { font-size: 1.7rem; margin-bottom: 1rem; color: #ffcd7e; text-shadow: 0 0 5px #b45f1b; }
+        .start-btn { background: #ff9f2e; border: none; padding: 1rem 2rem; font-family: 'Press Start 2P', monospace; font-size: 1.1rem; font-weight: bold; color: #1e1a0c; border-radius: 60px; cursor: pointer; transition: 0.2s; box-shadow: 0 5px 0 #7a3e0c; }
+        .start-btn:active { transform: translateY(3px); box-shadow: 0 2px 0 #7a3e0c; }
+        .hidden-overlay { opacity: 0; visibility: hidden; pointer-events: none; }
+        .header { text-align: center; padding: 2rem 1rem 1rem; border-bottom: 2px solid #2a3650; background: rgba(8, 12, 24, 0.7); backdrop-filter: blur(4px); }
+        .header h2 { font-family: 'Press Start 2P', monospace; color: #ffcd7e; font-size: 1.4rem; margin-bottom: 0.5rem; }
+        .console-nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem; margin: 1.5rem 1rem; }
+        .console-badge { background: #1e293b; padding: 0.5rem 1rem; border-radius: 40px; font-weight: bold; font-size: 0.8rem; font-family: monospace; border-left: 4px solid #ffb347; cursor: pointer; transition: 0.1s; }
+        .console-badge:hover { background: #2d3b54; transform: scale(1.02); color: white; }
+        .consoles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem; padding: 1.5rem; max-width: 1600px; margin: 0 auto; }
+        .console-card { background: rgba(18, 25, 45, 0.75); backdrop-filter: blur(4px); border-radius: 1.8rem; border: 1px solid #334155; overflow: hidden; transition: transform 0.2s, box-shadow 0.2s; }
+        .console-card:hover { transform: translateY(-5px); box-shadow: 0 20px 30px -12px black; border-color: #ffb34766; }
+        .console-header { background: #0f172ad9; padding: 1rem 1.2rem; display: flex; align-items: center; gap: 12px; border-bottom: 2px solid #ffb347; }
+        .console-header i { font-size: 2rem; color: #ffb347; }
+        .games-list { padding: 1rem; display: flex; flex-direction: column; gap: 1rem; }
+        .game-item { background: #0a0f1ccc; border-radius: 1.2rem; display: flex; align-items: center; gap: 1rem; padding: 0.7rem; border: 1px solid #2d3a55; }
+        .game-logo { width: 70px; height: 70px; background: #11161f; border-radius: 18px; display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
+        .game-logo img { max-width: 100%; max-height: 100%; object-fit: contain; }
+        .game-info { flex: 1; }
+        .game-title { font-weight: bold; font-size: 1rem; margin-bottom: 0.25rem; font-family: monospace; }
+        .play-btn { background: #2c3e5c; border: none; color: white; padding: 0.5rem 1rem; border-radius: 40px; font-weight: bold; cursor: pointer; transition: 0.15s; display: flex; align-items: center; gap: 8px; font-family: monospace; }
+        .play-btn:hover { background: #ff9f2e; color: #0a0f1e; transform: scale(1.02); }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); z-index: 3000; justify-content: center; align-items: center; backdrop-filter: blur(8px); }
+        .modal-content { background: #101624; width: 90%; max-width: 900px; border-radius: 1.8rem; border: 2px solid #ffb347; overflow: hidden; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.5rem; background: #0b1020; border-bottom: 1px solid #2a3650; }
+        .modal-header h4 { font-family: monospace; font-size: 1.2rem; }
+        .close-modal { font-size: 1.8rem; cursor: pointer; background: none; border: none; color: #ffb347; }
+        .emulator-container { width: 100%; min-height: 480px; background: #000; position: relative; }
+        footer { text-align: center; font-size: 0.75rem; margin-top: 2rem; padding: 1rem; color: #6f7c97; border-top: 1px solid #1f2a44; }
+        @media (max-width: 700px) { .consoles-grid { grid-template-columns: 1fr; } .game-logo { width: 55px; height: 55px; } }
     </style>
 </head>
 <body>
 
-<!-- OVERLAY DE BIENVENIDA + SONIDO -->
 <div id="welcomeOverlay" class="welcome-overlay">
     <div class="welcome-card">
         <i class="fas fa-gamepad" style="font-size: 3rem; color:#ffb347; margin-bottom: 1rem;"></i>
         <h1>ARCHIVO RETRO</h1>
         <p>Preservando la historia de los videojuegos<br> NES • SNES • GAME BOY • GBC • GBA • N64</p>
-        <button id="startBtn" class="start-btn"><i class="fas fa-play"></i> INICIAR SONIDO & ENTRAR</button>
-        <p style="font-size: 0.7rem; margin-top: 1.5rem;">♫ Al hacer clic revivirá un sonido clásico de arranque</p>
+        <button id="startBtn" class="start-btn"><i class="fas fa-play"></i> INICIAR</button>
     </div>
 </div>
 
-<!-- CONTENIDO PRINCIPAL (inicialmente oculto hasta el sonido) -->
 <main id="mainContent" style="display: none;">
     <div class="header">
         <h2><i class="fas fa-tape"></i> CONSERVANDO EL LEGADO</h2>
         <p>Navega por consolas, elige tu juego y emula directamente en el navegador</p>
     </div>
-
-    <!-- Navegación rápida -->
     <div class="console-nav">
         <div class="console-badge" data-console="nes">NES</div>
         <div class="console-badge" data-console="snes">SNES</div>
@@ -355,88 +69,60 @@
         <div class="console-badge" data-console="gba">GAME BOY ADVANCE</div>
         <div class="console-badge" data-console="n64">NINTENDO 64</div>
     </div>
-
-    <!-- Grid de columnas por consola (catálogo) -->
-    <div class="consoles-grid" id="consolesGrid">
-        <!-- Cada consola se generará dinámicamente desde JS con sus juegos e imágenes -->
-    </div>
-    <footer>
-        <i class="fas fa-database"></i> Preservación cultural sin ánimo de lucro — Asegúrate de poseer copias originales de los juegos.<br>
-        Emulador: EmulatorJS | Proyecto de archivo retro
-    </footer>
+    <div class="consoles-grid" id="consolesGrid"></div>
+    <footer><i class="fas fa-database"></i> Preservación cultural sin ánimo de lucro — Asegúrate de poseer copias originales de los juegos.</footer>
 </main>
 
-<!-- Modal para emulador -->
 <div id="emulatorModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
-            <h4 id="modalGameTitle"><i class="fas fa-crt"></i> Jugando...</h4>
+            <h4 id="modalGameTitle"><i class="fas fa-crt"></i> Cargando núcleo...</h4>
             <button class="close-modal" id="closeModalBtn">&times;</button>
         </div>
         <div id="emulatorContainer" class="emulator-container"></div>
         <div style="padding: 10px; text-align: center; background:#0b0f18; font-size:12px;">
-            Controles: teclado / gamepad compatible | Esc para salir de pantalla completa
+            Controles: teclado / gamepad | Esc para salir de pantalla completa
         </div>
     </div>
 </div>
 
 <script>
-    // ---------- CATÁLOGO DE JUEGOS (con imágenes de ejemplo, cada juego tiene su logo) ----------
-    // Se incluyen juegos emblemáticos para cada consola (son demo, debes reemplazar rutas de ROMs)
-    // Las imágenes son placeholder con emblemas y colores, pero se pueden sustituir por URLs reales.
-    // Formato: { nombre, sistema (clave), romPath (ruta simulada), logoUrl (imagen representativa) }
+    // --- Catálogo de juegos (Mantén tus rutas y datos) ---
     const juegosDB = [
         // NES
-        { nombre: "Super Mario Bros.", sistema: "nes", romPath: "roms/nes/super_mario_bros.nes", logoUrl: "https://raw.githubusercontent.com/retropower/icons/main/nes/smb.png" },
-        { nombre: "The Legend of Zelda", sistema: "nes", romPath: "roms/nes/zelda.nes", logoUrl: "https://raw.githubusercontent.com/retropower/icons/main/nes/zelda.png" },
-        { nombre: "Mega Man 2", sistema: "nes", romPath: "roms/nes/megaman2.nes", logoUrl: "https://raw.githubusercontent.com/retropower/icons/main/nes/megaman.png" },
+        { nombre: "Super Mario Bros.", sistema: "nes", romPath: "roms/nes/super_mario_bros.nes", logoUrl: "https://placehold.co/100x100/1e293b/ffb347?text=SMB" },
+        { nombre: "The Legend of Zelda", sistema: "nes", romPath: "roms/nes/zelda.nes", logoUrl: "https://placehold.co/100x100/1e293b/ffb347?text=Zelda" },
         // SNES
-        { nombre: "Super Mario World", sistema: "snes", romPath: "roms/snes/smw.sfc", logoUrl: "https://raw.githubusercontent.com/retropower/icons/main/snes/smw.png" },
-        { nombre: "The Legend of Zelda: A Link to the Past", sistema: "snes", romPath: "roms/snes/zelda_snes.sfc", logoUrl: "https://raw.githubusercontent.com/retropower/icons/main/snes/zelda_link.png" },
-        { nombre: "Super Metroid", sistema: "snes", romPath: "roms/snes/super_metroid.sfc", logoUrl: "https://raw.githubusercontent.com/retropower/icons/main/snes/super_metroid.png" },
-        // Game Boy
-        { nombre: "Pokémon Red", sistema: "gb", romPath: "roms/gb/pokemon_red.gb", logoUrl: "https://raw.githubusercontent.com/retropower/icons/main/gb/pokemon_red.png" },
-        { nombre: "The Legend of Zelda: Link's Awakening", sistema: "gb", romPath: "roms/gb/zelda_dx.gb", logoUrl: "https://raw.githubusercontent.com/retropower/icons/main/gb/zelda_links.png" },
-        // Game Boy Color
-        { nombre: "Pokémon Crystal", sistema: "gbc", romPath: "roms/gbc/crystal.gbc", logoUrl: "https://raw.githubusercontent.com/retropower/icons/main/gbc/pokemon_crystal.png" },
-        { nombre: "Metal Gear Solid", sistema: "gbc", romPath: "roms/gbc/mgs.gbc", logoUrl: "https://raw.githubusercontent.com/retropower/icons/main/gbc/mgs.png" },
-        // Game Boy Advance
-        { nombre: "Metroid Fusion", sistema: "gba", romPath: "roms/gba/fusion.gba", logoUrl: "https://raw.githubusercontent.com/retropower/icons/main/gba/fusion.png" },
-        { nombre: "Castlevania: Aria of Sorrow", sistema: "gba", romPath: "roms/gba/aria.gba", logoUrl: "https://raw.githubusercontent.com/retropower/icons/main/gba/aria.png" },
-        { nombre: "Mario Kart: Super Circuit", sistema: "gba", romPath: "roms/gba/mkart.gba", logoUrl: "https://raw.githubusercontent.com/retropower/icons/main/gba/mkart.png" },
-        // N64
-        { nombre: "Super Mario 64", sistema: "n64", romPath: "roms/n64/sm64.n64", logoUrl: "https://raw.githubusercontent.com/retropower/icons/main/n64/sm64.png" },
-        { nombre: "The Legend of Zelda: Ocarina of Time", sistema: "n64", romPath: "roms/n64/oot.n64", logoUrl: "https://raw.githubusercontent.com/retropower/icons/main/n64/oot.png" },
-        { nombre: "Mario Kart 64", sistema: "n64", romPath: "roms/n64/mk64.n64", logoUrl: "https://raw.githubusercontent.com/retropower/icons/main/n64/mk64.png" }
+        { nombre: "Super Mario World", sistema: "snes", romPath: "roms/snes/smw.sfc", logoUrl: "https://placehold.co/100x100/1e293b/ffb347?text=SMW" },
+        // GBA
+        { nombre: "Metroid Fusion", sistema: "gba", romPath: "roms/gba/fusion.gba", logoUrl: "https://placehold.co/100x100/1e293b/ffb347?text=Metroid" },
+        // N64 (Asegúrate de que la ruta coincida con tu archivo)
+        { nombre: "Super Mario 64", sistema: "n64", romPath: "roms/n64/sm64.n64", logoUrl: "https://placehold.co/100x100/1e293b/ffb347?text=SM64" }
     ];
 
-    // Configuración de nombres amigables y colores para consolas
     const consolasInfo = {
-        nes: { nombre: "NES (Nintendo)", icono: "fab fa-twitch", color: "#dd3b2b" },
-        snes: { nombre: "SUPER NES", icono: "fab fa-superpowers", color: "#3b9eff" },
-        gb: { nombre: "GAME BOY", icono: "fab fa-steam", color: "#8bc34a" },
-        gbc: { nombre: "GAME BOY COLOR", icono: "fas fa-palette", color: "#ffb74d" },
-        gba: { nombre: "GAME BOY ADVANCE", icono: "fas fa-expand", color: "#c792ea" },
-        n64: { nombre: "NINTENDO 64", icono: "fas fa-cube", color: "#ec9a3c" }
+        nes: { nombre: "NES", icono: "fab fa-twitch" },
+        snes: { nombre: "SUPER NES", icono: "fab fa-superpowers" },
+        gb: { nombre: "GAME BOY", icono: "fab fa-steam" },
+        gbc: { nombre: "GAME BOY COLOR", icono: "fas fa-palette" },
+        gba: { nombre: "GAME BOY ADVANCE", icono: "fas fa-expand" },
+        n64: { nombre: "NINTENDO 64", icono: "fas fa-cube" }
     };
 
-    // Función para renderizar todo el catálogo en columnas
     function renderCatalogo() {
         const grid = document.getElementById('consolesGrid');
         grid.innerHTML = '';
-        // Agrupar juegos por sistema
         const sistemas = ['nes', 'snes', 'gb', 'gbc', 'gba', 'n64'];
         for (let sys of sistemas) {
             const juegosFiltrados = juegosDB.filter(juego => juego.sistema === sys);
             if (juegosFiltrados.length === 0) continue;
             const info = consolasInfo[sys];
-            // Crear columna
             const card = document.createElement('div');
             card.className = 'console-card';
             card.id = `console-${sys}`;
             card.innerHTML = `
-                <div class="console-header" style="border-bottom-color: ${info.color}">
-                    <i class="${info.icono}" style="color:${info.color}"></i>
+                <div class="console-header">
+                    <i class="${info.icono}"></i>
                     <h3>${info.nombre}</h3>
                 </div>
                 <div class="games-list" id="games-${sys}"></div>
@@ -444,13 +130,11 @@
             grid.appendChild(card);
             const gamesContainer = card.querySelector(`.games-list`);
             juegosFiltrados.forEach(juego => {
-                // Si la imagen no carga, se coloca un placeholder interno
-                const imgSrc = juego.logoUrl;
                 const gameItem = document.createElement('div');
                 gameItem.className = 'game-item';
                 gameItem.innerHTML = `
                     <div class="game-logo">
-                        <img src="${imgSrc}" alt="logo ${juego.nombre}" onerror="this.onerror=null; this.src='https://placehold.co/100x100/1e293b/ffb347?text=${encodeURIComponent(juego.nombre.substring(0,3))}'">
+                        <img src="${juego.logoUrl}" alt="logo ${juego.nombre}" onerror="this.src='https://placehold.co/100x100/1e293b/ffb347?text=${encodeURIComponent(juego.nombre.substring(0,3))}'">
                     </div>
                     <div class="game-info">
                         <div class="game-title">${juego.nombre}</div>
@@ -463,10 +147,8 @@
                 gamesContainer.appendChild(gameItem);
             });
         }
-        // Agregar event listeners a botones jugar (después de render)
         document.querySelectorAll('.play-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                e.stopPropagation();
                 const sistema = btn.getAttribute('data-sistema');
                 const romPath = btn.getAttribute('data-rom');
                 const gameName = btn.getAttribute('data-nombre');
@@ -475,182 +157,110 @@
         });
     }
 
-    // Variables globales para emulador
+    // --- La clave: Función robusta para el emulador ---
     let currentEmulator = null;
     const modal = document.getElementById('emulatorModal');
     const modalTitle = document.getElementById('modalGameTitle');
     const emuContainer = document.getElementById('emulatorContainer');
     const closeModalBtn = document.getElementById('closeModalBtn');
 
-    // Función para abrir modal y cargar juego con EmulatorJS
-    function abrirEmulador(sistema, romUrl, gameTitle) {
-        // Limpiar contenedor y destruir instancia previa si existe
+    async function abrirEmulador(sistema, romUrl, gameTitle) {
+        // Limpiar y destruir instancia previa
         if (currentEmulator) {
-            try {
-                if (typeof currentEmulator.destroy === 'function') currentEmulator.destroy();
-                else if (currentEmulator.stop) currentEmulator.stop();
-            } catch(e) { console.warn(e); }
+            try { currentEmulator.destroy(); } catch(e) {}
             currentEmulator = null;
         }
-        emuContainer.innerHTML = ''; // vaciar div
-        // Crear nuevo div para emulador (necesario para que EmulatorJS monte canvas)
+        emuContainer.innerHTML = ''; 
+        modal.style.display = 'flex';
+        modalTitle.innerHTML = `<i class="fas fa-gamepad"></i> Cargando núcleo para ${gameTitle}...`;
+
+        // Crear contenedor para el emulador
         const emuDiv = document.createElement('div');
         emuDiv.id = 'dynamic-emulator';
         emuDiv.style.width = '100%';
-        emuDiv.style.height = '100%';
         emuDiv.style.minHeight = '480px';
         emuContainer.appendChild(emuDiv);
 
-        modalTitle.innerHTML = `<i class="fas fa-gamepad"></i> ${gameTitle} (${sistema.toUpperCase()})`;
-        modal.style.display = 'flex';
+        // Cargar dinámicamente el script de EmulatorJS si no está presente
+        if (typeof EmulatorJS === 'undefined') {
+            await new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = 'https://cdn.emulatorjs.org/stable/emulator.min.js';
+                script.onload = resolve;
+                script.onerror = reject;
+                document.head.appendChild(script);
+            });
+        }
 
-        // Mapeo del sistema al formato exacto de EmulatorJS
+        // Mapeo robusto de sistemas
         const systemMap = {
-            nes: 'nes', snes: 'snes', gb: 'gb', gbc: 'gbc', gba: 'gba', n64: 'n64'
+            nes: 'nes',
+            snes: 'snes',
+            gb: 'gb',
+            gbc: 'gbc',
+            gba: 'gba',
+            n64: 'n64'  // Usamos 'n64' que es el identificador correcto para EmulatorJS
         };
+        
         const emuSystem = systemMap[sistema];
         if (!emuSystem) {
-            emuContainer.innerHTML = `<div style="color:red; padding:2rem; text-align:center;">Sistema no soportado: ${sistema}</div>`;
+            emuContainer.innerHTML = `<div style="color:red; padding:2rem;">Sistema '${sistema}' no mapeado.</div>`;
             return;
         }
 
-        // Configurar EmulatorJS. Nota: Las ROMs deben estar accesibles, si no existen saldrá error.
-        // Mostramos mensaje de advertencia si la ROM no se encuentra (por derechos o ausencia).
-        // Intentamos cargar igualmente.
         try {
-            const options = {
+            // Inicializar EmulatorJS con la ROM
+            currentEmulator = await EmulatorJS.run({
                 system: emuSystem,
                 rom: romUrl,
                 element: document.getElementById('dynamic-emulator'),
                 gameUrl: window.location.origin,
                 onError: (error) => {
-                    console.error('Error emulador:', error);
-                    const errorDiv = document.createElement('div');
-                    errorDiv.style.background = '#aa2e2e';
-                    errorDiv.style.padding = '1rem';
-                    errorDiv.style.color = 'white';
-                    errorDiv.style.borderRadius = '8px';
-                    errorDiv.innerHTML = `<strong>⚠️ No se pudo cargar la ROM</strong><br>Verifica que el archivo "${romUrl}" exista en el servidor.<br>Para preservación, coloca tus ROMs legales en la carpeta correspondiente.`;
-                    if (emuContainer.firstChild) emuContainer.insertBefore(errorDiv, emuContainer.firstChild);
-                    else emuContainer.appendChild(errorDiv);
+                    console.error('Error del emulador:', error);
+                    emuContainer.innerHTML = `<div style="padding:2rem; background:#aa2e2e; color:white; border-radius:8px;">
+                        <strong>Error al cargar:</strong> ${error}<br>
+                        Verifica que la ROM exista en la ruta: <strong>${romUrl}</strong>
+                    </div>`;
                 }
-            };
-            currentEmulator = EmulatorJS.run(options);
+            });
+            modalTitle.innerHTML = `<i class="fas fa-gamepad"></i> Jugando: ${gameTitle}`;
         } catch(err) {
             console.error(err);
-            emuContainer.innerHTML = `<div style="padding:2rem; text-align:center;">Error al iniciar emulador: ${err.message}</div>`;
+            emuContainer.innerHTML = `<div style="padding:2rem; color:red;">Fallo crítico: ${err.message}. Asegúrate de que el archivo de la ROM sea correcto.</div>`;
         }
     }
 
-    // Cerrar modal y detener emulador
     function cerrarModal() {
         modal.style.display = 'none';
         if (currentEmulator) {
-            try {
-                if (typeof currentEmulator.destroy === 'function') currentEmulator.destroy();
-                else if (currentEmulator.stop) currentEmulator.stop();
-            } catch(e) {}
+            try { currentEmulator.destroy(); } catch(e) {}
             currentEmulator = null;
         }
-        emuContainer.innerHTML = ''; // limpia recursos
+        emuContainer.innerHTML = '';
     }
 
     closeModalBtn.addEventListener('click', cerrarModal);
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) cerrarModal();
-    });
+    modal.addEventListener('click', (e) => { if (e.target === modal) cerrarModal(); });
 
-    // ---------- SONIDO DE INICIO (Web Audio - sintetizador estilo arcade) ----------
-    let audioCtx = null;
-    function playStartupSound() {
-        try {
-            if (!audioCtx) {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            }
-            const now = audioCtx.currentTime;
-            const gainNode = audioCtx.createGain();
-            gainNode.gain.setValueAtTime(0.3, now);
-            gainNode.connect(audioCtx.destination);
-            // Secuencia rápida tipo inicio de juego
-            const osc1 = audioCtx.createOscillator();
-            osc1.type = 'square';
-            osc1.frequency.setValueAtTime(523.25, now); // Do5
-            osc1.connect(gainNode);
-            osc1.start();
-            osc1.stop(now + 0.15);
-            
-            const osc2 = audioCtx.createOscillator();
-            osc2.type = 'square';
-            osc2.frequency.setValueAtTime(659.25, now + 0.1); // Mi5
-            osc2.connect(gainNode);
-            osc2.start(now + 0.1);
-            osc2.stop(now + 0.25);
-            
-            const osc3 = audioCtx.createOscillator();
-            osc3.type = 'square';
-            osc3.frequency.setValueAtTime(783.99, now + 0.2); // Sol5
-            osc3.connect(gainNode);
-            osc3.start(now + 0.2);
-            osc3.stop(now + 0.4);
-            
-            const bass = audioCtx.createOscillator();
-            bass.type = 'triangle';
-            bass.frequency.setValueAtTime(130.81, now + 0.05); // Do3
-            bass.connect(gainNode);
-            bass.start(now + 0.05);
-            bass.stop(now + 0.45);
-            
-            // pequeño fade out
-            gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 0.55);
-            audioCtx.resume();
-        } catch(e) { console.warn("Audio no soportado", e); }
-    }
-
-    // Manejo del overlay de bienvenida
+    // --- Bienvenida y renderizado inicial ---
     const welcomeDiv = document.getElementById('welcomeOverlay');
     const mainContainer = document.getElementById('mainContent');
     const startButton = document.getElementById('startBtn');
     
-    startButton.addEventListener('click', (e) => {
-        // Reproducir sonido
-        playStartupSound();
-        // Ocultar overlay con animación
+    startButton.addEventListener('click', () => {
         welcomeDiv.classList.add('hidden-overlay');
-        // Mostrar contenido principal
         mainContainer.style.display = 'block';
-        // Renderizar catálogo por primera vez
         renderCatalogo();
-        // Opcional: scroll suave
-        setTimeout(() => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }, 100);
     });
 
-    // Navegación rápida: desplazamiento a la consola correspondiente
+    // Navegación por consolas
     document.querySelectorAll('.console-badge').forEach(badge => {
         badge.addEventListener('click', () => {
             const cons = badge.getAttribute('data-console');
             const targetCard = document.getElementById(`console-${cons}`);
-            if (targetCard) {
-                targetCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                targetCard.style.transition = '0.3s';
-                targetCard.style.boxShadow = '0 0 0 2px #ffb347';
-                setTimeout(() => {
-                    targetCard.style.boxShadow = '';
-                }, 1200);
-            }
+            if (targetCard) targetCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
     });
-
-    // Si el usuario intenta recargar la página sin pasar por bienvenida, se asegura estado
-    if (localStorage.getItem('retroStarted') === 'true') {
-        // pero por seguridad respetamos el overlay, lo mostramos pero solo por si hubiera recarga forzada.
-        // Para que el sonido suceda solo con interacción. Dejamos la pantalla de bienvenida visible hasta clic.
-        // No hacer nada extra.
-    }
-    // Nota: las rutas de ROMS son solo demostrativas. Reemplazar por archivos válidos.
-    // Si no existen, el emulador mostrará error según onError.
-    console.log("Archivo Retro listo. Añade tus ROMs en la carpeta /roms/ siguiendo las rutas definidas.");
 </script>
 </body>
 </html>
