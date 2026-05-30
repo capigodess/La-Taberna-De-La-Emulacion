@@ -405,7 +405,7 @@
         { nombre: "Castlevania: Aria of Sorrow", sistema: "gba", romPath: "roms/gba/aria.gba", logoUrl: "https://raw.githubusercontent.com/retropower/icons/main/gba/aria.png" },
         { nombre: "Mario Kart: Super Circuit", sistema: "gba", romPath: "roms/gba/mkart.gba", logoUrl: "https://raw.githubusercontent.com/retropower/icons/main/gba/mkart.png" },
         // N64
-        { nombre: "Super Mario 64", sistema: "n64", romPath: "roms/n64/sm64.z64", logoUrl: "https://raw.githubusercontent.com/retropower/icons/main/n64/sm64.png" },
+        { nombre: "Super Mario 64", sistema: "n64", romPath: "roms/n64/sm64.n64", logoUrl: "https://raw.githubusercontent.com/retropower/icons/main/n64/sm64.png" },
         { nombre: "The Legend of Zelda: Ocarina of Time", sistema: "n64", romPath: "roms/n64/oot.n64", logoUrl: "https://raw.githubusercontent.com/retropower/icons/main/n64/oot.png" },
         { nombre: "Mario Kart 64", sistema: "n64", romPath: "roms/n64/mk64.n64", logoUrl: "https://raw.githubusercontent.com/retropower/icons/main/n64/mk64.png" }
     ];
@@ -506,7 +506,7 @@
 
         // Mapeo del sistema al formato exacto de EmulatorJS
         const systemMap = {
-            nes: 'nes', snes: 'snes', gb: 'gb', gbc: 'gbc', gba: 'gba', z64: 'z64'
+            nes: 'nes', snes: 'snes', gb: 'gb', gbc: 'gbc', gba: 'gba', n64: 'n64'
         };
         const emuSystem = systemMap[sistema];
         if (!emuSystem) {
