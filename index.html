@@ -3,91 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>La Taberna de la Emulación - NES a N64 + Sega</title>
+    <title>La Taberna de la Emulación - Catálogo Completo</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:opsz,wght@14..32,300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* ===== ESTILOS CON FONDO OSCURO 45 GRADOS ===== */
+        /* ===== ESTILOS (los mismos que tenías) ===== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: linear-gradient(145deg, #0a0f1e 0%, #0c1222 100%); font-family: 'Inter', sans-serif; color: #eef4ff; line-height: 1.5; padding-bottom: 3rem; }
-
-        /* Pantalla de bienvenida */
         .welcome-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at center, #0b1120, #03060c); z-index: 2000; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(6px); transition: opacity 0.6s ease, visibility 0.6s; font-family: 'Press Start 2P', monospace; }
         .welcome-card { background: rgba(10, 20, 30, 0.85); backdrop-filter: blur(12px); border-radius: 2rem; padding: 2.5rem 2rem; text-align: center; border: 2px solid #ffb347; box-shadow: 0 0 40px rgba(255, 180, 70, 0.3); max-width: 500px; margin: 1rem; }
         .welcome-card h1 { font-size: 1.7rem; margin-bottom: 1rem; color: #ffcd7e; }
         .start-btn { background: #ff9f2e; border: none; padding: 1rem 2rem; font-family: 'Press Start 2P', monospace; font-size: 1.1rem; font-weight: bold; color: #1e1a0c; border-radius: 60px; cursor: pointer; transition: 0.2s; box-shadow: 0 5px 0 #7a3e0c; }
         .start-btn:active { transform: translateY(3px); box-shadow: 0 2px 0 #7a3e0c; }
         .hidden-overlay { opacity: 0; visibility: hidden; pointer-events: none; }
-
-        /* Header */
         .header { text-align: center; padding: 2rem 1rem 1rem; border-bottom: 2px solid #2a3650; background: rgba(8,12,24,0.7); backdrop-filter: blur(4px); }
         .header h2 { font-family: 'Press Start 2P', monospace; color: #ffcd7e; font-size: 1.4rem; }
-
-        /* Navegación rápida */
         .console-nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem; margin: 1.5rem 1rem; }
         .console-badge { background: #1e293b; padding: 0.5rem 1rem; border-radius: 40px; font-weight: bold; font-size: 0.8rem; font-family: monospace; border-left: 4px solid #ffb347; cursor: pointer; color: #cbd5e6; }
         .console-badge:hover { background: #2d3b54; transform: scale(1.02); color: white; }
-
-        /* Grid de consolas */
         .consoles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem; padding: 1.5rem; max-width: 1600px; margin: 0 auto; }
-
-        /* Tarjeta de cada consola (fondo degradado oscuro 45deg) */
-        .console-card { 
-            background: linear-gradient(45deg, #0a0a14, #11111f); 
-            backdrop-filter: blur(4px);
-            border-radius: 1.8rem; 
-            border: 1px solid #2a3440; 
-            overflow: hidden; 
-            transition: transform 0.2s, box-shadow 0.2s; 
-            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-        }
+        .console-card { background: linear-gradient(45deg, #0a0a14, #11111f); backdrop-filter: blur(4px); border-radius: 1.8rem; border: 1px solid #2a3440; overflow: hidden; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 8px 20px rgba(0,0,0,0.4); }
         .console-card:hover { transform: translateY(-5px); box-shadow: 0 20px 30px -12px black; border-color: #ffb34766; }
-
-        /* Cabecera de la consola */
         .console-header { background: #0f172ad9; padding: 1rem 1.2rem; display: flex; align-items: center; gap: 12px; border-bottom: 2px solid #ffb347; }
         .console-header i { font-size: 2rem; color: #ffb347; }
         .console-header h3 { font-size: 1.6rem; font-weight: 700; letter-spacing: 1px; }
-
-        /* Lista de juegos */
-        .games-list { padding: 1rem; display: flex; flex-direction: column; gap: 1rem; }
-
-        /* Cada juego (fondo degradado oscuro 135deg) */
-        .game-item { 
-            background: linear-gradient(135deg, #0d0d18, #05050c);
-            border-radius: 1.2rem; 
-            display: flex; 
-            align-items: center; 
-            gap: 1rem; 
-            padding: 0.7rem; 
-            border: 1px solid #2a3440; 
-            transition: all 0.2s;
-        }
+        .games-list { padding: 1rem; display: flex; flex-direction: column; gap: 1rem; max-height: 600px; overflow-y: auto; }
+        .game-item { background: linear-gradient(135deg, #0d0d18, #05050c); border-radius: 1.2rem; display: flex; align-items: center; gap: 1rem; padding: 0.7rem; border: 1px solid #2a3440; transition: all 0.2s; }
         .game-item:hover { border-color: #ffb34788; background: linear-gradient(135deg, #111120, #080812); }
-
-        /* Logo del juego (carátula) */
-        .game-logo { 
-            width: 70px; 
-            height: 70px; 
-            background: #0c0c18; 
-            border-radius: 18px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            overflow: hidden; 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5); 
-            flex-shrink: 0;
-        }
+        .game-logo { width: 70px; height: 70px; background: #0c0c18; border-radius: 18px; display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
         .game-logo img { max-width: 100%; max-height: 100%; object-fit: contain; }
-
         .game-info { flex: 1; }
         .game-title { font-weight: bold; font-size: 1rem; margin-bottom: 0.25rem; font-family: monospace; }
         .game-system { font-size: 0.7rem; color: #98a9c7; background: #1e293b; display: inline-block; padding: 0.1rem 0.5rem; border-radius: 20px; }
-
-        /* Botón jugar */
         .play-btn { background: #2c3e5c; border: none; color: white; padding: 0.5rem 1rem; border-radius: 40px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 8px; font-family: monospace; transition: 0.15s; }
         .play-btn:hover { background: #ff9f2e; color: #0a0f1e; transform: scale(1.02); }
-
-        /* Modal */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 3000; justify-content: center; align-items: center; backdrop-filter: blur(8px); }
         .modal-content { background: #101624; width: 90%; max-width: 900px; border-radius: 1.8rem; border: 2px solid #ffb347; overflow: hidden; }
         .modal-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.5rem; background: #0b1020; border-bottom: 1px solid #2a3650; }
@@ -95,11 +44,10 @@
         .close-modal { font-size: 1.8rem; cursor: pointer; background: none; border: none; color: #ffb347; }
         .emulator-frame { width: 100%; height: 480px; border: none; background: #000; }
         footer { text-align: center; font-size: 0.75rem; margin-top: 2rem; padding: 1rem; color: #6f7c97; border-top: 1px solid #1f2a44; }
-
-        @media (max-width: 700px) { 
-            .consoles-grid { grid-template-columns: 1fr; } 
-            .game-logo { width: 55px; height: 55px; } 
-        }
+        @media (max-width: 700px) { .consoles-grid { grid-template-columns: 1fr; } .game-logo { width: 55px; height: 55px; } }
+        .games-list::-webkit-scrollbar { width: 8px; }
+        .games-list::-webkit-scrollbar-track { background: #1e293b; border-radius: 10px; }
+        .games-list::-webkit-scrollbar-thumb { background: #ffb347; border-radius: 10px; }
     </style>
 </head>
 <body>
@@ -151,9 +99,7 @@
 </div>
 
 <script>
-    // ================== CATÁLOGO DE JUEGOS CON RUTAS DE CARÁTULAS ABSOLUTAS ==================
-    // Las rutas de las carátulas apuntan a la carpeta /La-Taberna-De-La-Emulacion/roms/.../boxart/
-    // Asegúrate de que las imágenes PNG estén en esas ubicaciones dentro de tu repositorio.
+    // ================== CATÁLOGO COMPLETO DE JUEGOS (SIN NINTENDO DS) ==================
     const juegosDB = [
         // NES
         { nombre: "Super Mario Bros.", sistema: "nes", romPath: "roms/nes/super_mario_bros.nes", logoUrl: "/La-Taberna-De-La-Emulacion/roms/nes/boxart/super_mario_bros.png" },
@@ -161,40 +107,70 @@
         { nombre: "Mega Man 2", sistema: "nes", romPath: "roms/nes/megaman2.nes", logoUrl: "/La-Taberna-De-La-Emulacion/roms/nes/boxart/megaman2.png" },
         { nombre: "Castlevania", sistema: "nes", romPath: "roms/nes/castlevania.nes", logoUrl: "/La-Taberna-De-La-Emulacion/roms/nes/boxart/castlevania.png" },
         { nombre: "Metroid", sistema: "nes", romPath: "roms/nes/metroid.nes", logoUrl: "/La-Taberna-De-La-Emulacion/roms/nes/boxart/metroid.png" },
+        { nombre: "Contra", sistema: "nes", romPath: "roms/nes/contra.nes", logoUrl: "/La-Taberna-De-La-Emulacion/roms/nes/boxart/contra.png" },
+        { nombre: "Ninja Gaiden", sistema: "nes", romPath: "roms/nes/ninja_gaiden.nes", logoUrl: "/La-Taberna-De-La-Emulacion/roms/nes/boxart/ninja_gaiden.png" },
+        { nombre: "Final Fantasy", sistema: "nes", romPath: "roms/nes/final_fantasy.nes", logoUrl: "/La-Taberna-De-La-Emulacion/roms/nes/boxart/final_fantasy.png" },
+        { nombre: "Punch-Out!!", sistema: "nes", romPath: "roms/nes/punchout.nes", logoUrl: "/La-Taberna-De-La-Emulacion/roms/nes/boxart/punchout.png" },
+        { nombre: "Kirby's Adventure", sistema: "nes", romPath: "roms/nes/kirby.nes", logoUrl: "/La-Taberna-De-La-Emulacion/roms/nes/boxart/kirby.png" },
         // SNES
         { nombre: "Super Mario World", sistema: "snes", romPath: "roms/snes/smw.sfc", logoUrl: "/La-Taberna-De-La-Emulacion/roms/snes/boxart/smw.png" },
         { nombre: "Zelda: A Link to the Past", sistema: "snes", romPath: "roms/snes/zelda_snes.sfc", logoUrl: "/La-Taberna-De-La-Emulacion/roms/snes/boxart/zelda_snes.png" },
         { nombre: "Super Metroid", sistema: "snes", romPath: "roms/snes/super_metroid.sfc", logoUrl: "/La-Taberna-De-La-Emulacion/roms/snes/boxart/super_metroid.png" },
         { nombre: "Chrono Trigger", sistema: "snes", romPath: "roms/snes/chrono.sfc", logoUrl: "/La-Taberna-De-La-Emulacion/roms/snes/boxart/chrono.png" },
         { nombre: "Super Mario Kart", sistema: "snes", romPath: "roms/snes/super_mario_kart.sfc", logoUrl: "/La-Taberna-De-La-Emulacion/roms/snes/boxart/super_mario_kart.png" },
+        { nombre: "Donkey Kong Country", sistema: "snes", romPath: "roms/snes/dkc.sfc", logoUrl: "/La-Taberna-De-La-Emulacion/roms/snes/boxart/dkc.png" },
+        { nombre: "EarthBound", sistema: "snes", romPath: "roms/snes/earthbound.sfc", logoUrl: "/La-Taberna-De-La-Emulacion/roms/snes/boxart/earthbound.png" },
+        { nombre: "Final Fantasy VI", sistema: "snes", romPath: "roms/snes/ff6.sfc", logoUrl: "/La-Taberna-De-La-Emulacion/roms/snes/boxart/ff6.png" },
+        { nombre: "Street Fighter II Turbo", sistema: "snes", romPath: "roms/snes/sf2t.sfc", logoUrl: "/La-Taberna-De-La-Emulacion/roms/snes/boxart/sf2t.png" },
+        { nombre: "Super Castlevania IV", sistema: "snes", romPath: "roms/snes/castlevania4.sfc", logoUrl: "/La-Taberna-De-La-Emulacion/roms/snes/boxart/castlevania4.png" },
         // Game Boy
         { nombre: "Pokémon Red", sistema: "gb", romPath: "roms/gb/pokemon_red.gb", logoUrl: "/La-Taberna-De-La-Emulacion/roms/gb/boxart/pokemon_red.png" },
-        { nombre: "The Legend of Zelda: Link's Awakening", sistema: "gb", romPath: "roms/gb/zelda_dx.gb", logoUrl: "/La-Taberna-De-La-Emulacion/roms/gb/boxart/zelda_dx.png" },
+        { nombre: "Zelda: Link's Awakening", sistema: "gb", romPath: "roms/gb/zelda_dx.gb", logoUrl: "/La-Taberna-De-La-Emulacion/roms/gb/boxart/zelda_dx.png" },
+        { nombre: "Super Mario Land 2", sistema: "gb", romPath: "roms/gb/mario_land2.gb", logoUrl: "/La-Taberna-De-La-Emulacion/roms/gb/boxart/mario_land2.png" },
+        { nombre: "Tetris", sistema: "gb", romPath: "roms/gb/tetris.gb", logoUrl: "/La-Taberna-De-La-Emulacion/roms/gb/boxart/tetris.png" },
+        { nombre: "Metroid II: Return of Samus", sistema: "gb", romPath: "roms/gb/metroid2.gb", logoUrl: "/La-Taberna-De-La-Emulacion/roms/gb/boxart/metroid2.png" },
         // Game Boy Color
         { nombre: "Pokémon Crystal", sistema: "gbc", romPath: "roms/gbc/crystal.gbc", logoUrl: "/La-Taberna-De-La-Emulacion/roms/gbc/boxart/crystal.png" },
         { nombre: "Metal Gear Solid", sistema: "gbc", romPath: "roms/gbc/mgs.gbc", logoUrl: "/La-Taberna-De-La-Emulacion/roms/gbc/boxart/mgs.png" },
+        { nombre: "Zelda: Oracle of Ages", sistema: "gbc", romPath: "roms/gbc/oracle_ages.gbc", logoUrl: "/La-Taberna-De-La-Emulacion/roms/gbc/boxart/oracle_ages.png" },
+        { nombre: "Zelda: Oracle of Seasons", sistema: "gbc", romPath: "roms/gbc/oracle_seasons.gbc", logoUrl: "/La-Taberna-De-La-Emulacion/roms/gbc/boxart/oracle_seasons.png" },
+        { nombre: "Shantae", sistema: "gbc", romPath: "roms/gbc/shantae.gbc", logoUrl: "/La-Taberna-De-La-Emulacion/roms/gbc/boxart/shantae.png" },
         // Game Boy Advance
         { nombre: "Metroid Fusion", sistema: "gba", romPath: "roms/gba/fusion.gba", logoUrl: "/La-Taberna-De-La-Emulacion/roms/gba/boxart/fusion.png" },
         { nombre: "Castlevania: Aria of Sorrow", sistema: "gba", romPath: "roms/gba/aria.gba", logoUrl: "/La-Taberna-De-La-Emulacion/roms/gba/boxart/aria.png" },
         { nombre: "Mario Kart Super Circuit", sistema: "gba", romPath: "roms/gba/mkart.gba", logoUrl: "/La-Taberna-De-La-Emulacion/roms/gba/boxart/mkart.png" },
-        // N64
+        { nombre: "Zelda: The Minish Cap", sistema: "gba", romPath: "roms/gba/minish_cap.gba", logoUrl: "/La-Taberna-De-La-Emulacion/roms/gba/boxart/minish_cap.png" },
+        { nombre: "Pokémon Emerald", sistema: "gba", romPath: "roms/gba/emerald.gba", logoUrl: "/La-Taberna-De-La-Emulacion/roms/gba/boxart/emerald.png" },
+        { nombre: "Golden Sun", sistema: "gba", romPath: "roms/gba/golden_sun.gba", logoUrl: "/La-Taberna-De-La-Emulacion/roms/gba/boxart/golden_sun.png" },
+        { nombre: "Fire Emblem", sistema: "gba", romPath: "roms/gba/fire_emblem.gba", logoUrl: "/La-Taberna-De-La-Emulacion/roms/gba/boxart/fire_emblem.png" },
+        // Nintendo 64
         { nombre: "Super Mario 64", sistema: "n64", romPath: "roms/n64/sm64.zip", logoUrl: "/La-Taberna-De-La-Emulacion/roms/n64/boxart/sm64.png" },
-        { nombre: "The Legend of Zelda: Ocarina of Time", sistema: "n64", romPath: "roms/n64/oot.zip", logoUrl: "/La-Taberna-De-La-Emulacion/roms/n64/boxart/oot.png" },
+        { nombre: "Zelda: Ocarina of Time", sistema: "n64", romPath: "roms/n64/oot.zip", logoUrl: "/La-Taberna-De-La-Emulacion/roms/n64/boxart/oot.png" },
         { nombre: "Mario Kart 64", sistema: "n64", romPath: "roms/n64/mk64.zip", logoUrl: "/La-Taberna-De-La-Emulacion/roms/n64/boxart/mk64.png" },
-        // Sega Mega Drive (Genesis)
+        { nombre: "GoldenEye 007", sistema: "n64", romPath: "roms/n64/goldeneye.zip", logoUrl: "/La-Taberna-De-La-Emulacion/roms/n64/boxart/goldeneye.png" },
+        { nombre: "Star Fox 64", sistema: "n64", romPath: "roms/n64/starfox64.zip", logoUrl: "/La-Taberna-De-La-Emulacion/roms/n64/boxart/starfox64.png" },
+        { nombre: "Banjo-Kazooie", sistema: "n64", romPath: "roms/n64/banjo.zip", logoUrl: "/La-Taberna-De-La-Emulacion/roms/n64/boxart/banjo.png" },
+        // Sega Mega Drive
         { nombre: "Sonic the Hedgehog", sistema: "genesis", romPath: "roms/genesis/sonic.bin", logoUrl: "/La-Taberna-De-La-Emulacion/roms/genesis/boxart/sonic.png" },
         { nombre: "Streets of Rage 2", sistema: "genesis", romPath: "roms/genesis/streets2.bin", logoUrl: "/La-Taberna-De-La-Emulacion/roms/genesis/boxart/streets2.png" },
         { nombre: "Gunstar Heroes", sistema: "genesis", romPath: "roms/genesis/gunstar.bin", logoUrl: "/La-Taberna-De-La-Emulacion/roms/genesis/boxart/gunstar.png" },
         { nombre: "Mortal Kombat II", sistema: "genesis", romPath: "roms/genesis/mk2.bin", logoUrl: "/La-Taberna-De-La-Emulacion/roms/genesis/boxart/mk2.png" },
+        { nombre: "Shining Force II", sistema: "genesis", romPath: "roms/genesis/shining2.bin", logoUrl: "/La-Taberna-De-La-Emulacion/roms/genesis/boxart/shining2.png" },
+        { nombre: "Phantasy Star IV", sistema: "genesis", romPath: "roms/genesis/ps4.bin", logoUrl: "/La-Taberna-De-La-Emulacion/roms/genesis/boxart/ps4.png" },
+        { nombre: "Castlevania: Bloodlines", sistema: "genesis", romPath: "roms/genesis/castlevania_b.bin", logoUrl: "/La-Taberna-De-La-Emulacion/roms/genesis/boxart/castlevania_b.png" },
         // Sega CD
         { nombre: "Sonic CD", sistema: "segacd", romPath: "roms/segacd/soniccd.zip", logoUrl: "/La-Taberna-De-La-Emulacion/roms/segacd/boxart/soniccd.png" },
         { nombre: "Lunar: Eternal Blue", sistema: "segacd", romPath: "roms/segacd/lunar.zip", logoUrl: "/La-Taberna-De-La-Emulacion/roms/segacd/boxart/lunar.png" },
+        { nombre: "Snatcher", sistema: "segacd", romPath: "roms/segacd/snatcher.zip", logoUrl: "/La-Taberna-De-La-Emulacion/roms/segacd/boxart/snatcher.png" },
+        { nombre: "Popful Mail", sistema: "segacd", romPath: "roms/segacd/popful.zip", logoUrl: "/La-Taberna-De-La-Emulacion/roms/segacd/boxart/popful.png" },
         // Sega 32X
         { nombre: "Knuckles' Chaotix", sistema: "sega32x", romPath: "roms/32x/chaotix.32x", logoUrl: "/La-Taberna-De-La-Emulacion/roms/32x/boxart/chaotix.png" },
-        { nombre: "Virtua Racing", sistema: "sega32x", romPath: "roms/32x/vracing.32x", logoUrl: "/La-Taberna-De-La-Emulacion/roms/32x/boxart/vracing.png" }
+        { nombre: "Virtua Racing", sistema: "sega32x", romPath: "roms/32x/vracing.32x", logoUrl: "/La-Taberna-De-La-Emulacion/roms/32x/boxart/vracing.png" },
+        { nombre: "Star Wars Arcade", sistema: "sega32x", romPath: "roms/32x/starwars.32x", logoUrl: "/La-Taberna-De-La-Emulacion/roms/32x/boxart/starwars.png" },
+        { nombre: "Tempo", sistema: "sega32x", romPath: "roms/32x/tempo.32x", logoUrl: "/La-Taberna-De-La-Emulacion/roms/32x/boxart/tempo.png" }
     ];
 
-    // Información de consolas (iconos y nombres)
+    // Información de consolas
     const consolasInfo = {
         nes: { nombre: "NES", icono: "fab fa-twitch", color: "#dd3b2b" },
         snes: { nombre: "SUPER NES", icono: "fab fa-superpowers", color: "#3b9eff" },
@@ -207,7 +183,7 @@
         sega32x: { nombre: "SEGA 32X", icono: "fas fa-microchip", color: "#ff6b6b" }
     };
 
-    // Función para obtener la URL base correcta (para las ROMs)
+    // Función para obtener la URL base correcta
     function getBaseUrl() {
         let path = window.location.pathname;
         if (path.includes('/') && !path.endsWith('/')) {
@@ -217,7 +193,7 @@
         return window.location.origin + path;
     }
 
-    // Renderiza el catálogo en columnas
+    // Renderiza el catálogo
     function renderCatalogo() {
         const grid = document.getElementById('consolesGrid');
         if (!grid) return;
@@ -274,7 +250,7 @@
     const iframe = document.getElementById('gameIframe');
     const closeModalBtn = document.getElementById('closeModalBtn');
 
-    // Función para abrir el emulador con todas las optimizaciones de rendimiento
+    // Función para abrir el emulador
     function abrirEmulador(sistema, romPath, gameTitle) {
         iframe.srcdoc = '';
         modal.style.display = 'flex';
@@ -284,7 +260,6 @@
         let romUrl = romPath.startsWith('http') ? romPath : baseUrl + romPath;
         console.log("Cargando ROM:", romUrl);
 
-        // Mapeo de sistemas a identificadores de EmulatorJS
         const systemMap = {
             nes: 'nes', snes: 'snes', gb: 'gb', gbc: 'gbc', gba: 'gba', n64: 'n64',
             genesis: 'genesis', segacd: 'segacd', sega32x: 'sega32x'
@@ -303,15 +278,11 @@
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
             <title>${gameTitle}</title>
-            <style>
-                body { margin: 0; padding: 0; background: #000; }
-                #game { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
-            </style>
+            <style> body { margin: 0; padding: 0; background: #000; } #game { width: 100%; height: 100%; position: absolute; top: 0; left: 0; } </style>
         </head>
         <body>
             <div id="game"></div>
             <script>
-                // === CONFIGURACIÓN DE EMULATORJS CON OPTIMIZACIONES ===
                 window.EJS_player = "#game";
                 window.EJS_core = "${emuSystem}";
                 window.EJS_gameUrl = "${romUrl}";
@@ -319,12 +290,10 @@
                 window.EJS_autostart = true;
                 window.EJS_volume = 0.8;
                 window.EJS_language = "es-ES";
-                
-                // === OPTIMIZACIONES DE RENDIMIENTO ===
-                window.EJS_vsync = false;           // Desactivar VSync (mejora fluidez)
-                window.EJS_max_ram = 512;            // Límite de memoria (MB)
-                window.EJS_frame_skip = 2;           // Salto de tramas (1-3 recomendado)
-                window.EJS_audio_buffer = 1024;      // Buffer de audio (evita cortes)
+                window.EJS_vsync = false;
+                window.EJS_max_ram = 512;
+                window.EJS_frame_skip = 2;
+                window.EJS_audio_buffer = 1024;
             <\/script>
             <script src="https://cdn.emulatorjs.org/stable/data/loader.js"><\/script>
         </body>
@@ -343,7 +312,7 @@
     closeModalBtn.addEventListener('click', cerrarModal);
     modal.addEventListener('click', (e) => { if (e.target === modal) cerrarModal(); });
 
-    // Sonido de inicio (sintetizado)
+    // Sonido de inicio
     let audioCtx = null;
     function playStartupSound() {
         try {
@@ -352,31 +321,11 @@
             const gainNode = audioCtx.createGain();
             gainNode.gain.setValueAtTime(0.3, now);
             gainNode.connect(audioCtx.destination);
-            const osc1 = audioCtx.createOscillator();
-            osc1.type = 'square';
-            osc1.frequency.setValueAtTime(523.25, now);
-            osc1.connect(gainNode);
-            osc1.start();
-            osc1.stop(now + 0.15);
-            const osc2 = audioCtx.createOscillator();
-            osc2.type = 'square';
-            osc2.frequency.setValueAtTime(659.25, now + 0.1);
-            osc2.connect(gainNode);
-            osc2.start(now + 0.1);
-            osc2.stop(now + 0.25);
-            const osc3 = audioCtx.createOscillator();
-            osc3.type = 'square';
-            osc3.frequency.setValueAtTime(783.99, now + 0.2);
-            osc3.connect(gainNode);
-            osc3.start(now + 0.2);
-            osc3.stop(now + 0.4);
-            const bass = audioCtx.createOscillator();
-            bass.type = 'triangle';
-            bass.frequency.setValueAtTime(130.81, now + 0.05);
-            bass.connect(gainNode);
-            bass.start(now + 0.05);
-            bass.stop(now + 0.45);
-            gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 0.55);
+            const osc1 = audioCtx.createOscillator(); osc1.type = 'square'; osc1.frequency.value = 523.25; osc1.connect(gainNode); osc1.start(); osc1.stop(now+0.15);
+            const osc2 = audioCtx.createOscillator(); osc2.type = 'square'; osc2.frequency.value = 659.25; osc2.connect(gainNode); osc2.start(now+0.1); osc2.stop(now+0.25);
+            const osc3 = audioCtx.createOscillator(); osc3.type = 'square'; osc3.frequency.value = 783.99; osc3.connect(gainNode); osc3.start(now+0.2); osc3.stop(now+0.4);
+            const bass = audioCtx.createOscillator(); bass.type = 'triangle'; bass.frequency.value = 130.81; bass.connect(gainNode); bass.start(now+0.05); bass.stop(now+0.45);
+            gainNode.gain.exponentialRampToValueAtTime(0.0001, now+0.55);
             audioCtx.resume();
         } catch(e) { console.warn("Audio no soportado", e); }
     }
@@ -402,7 +351,7 @@
         });
     });
 
-    console.log("La Taberna de la Emulación está lista. Las carátulas se cargan desde /La-Taberna-De-La-Emulacion/roms/.../boxart/");
+    console.log("La Taberna de la Emulación - Catálogo completo cargado (sin Nintendo DS).");
 </script>
 </body>
 </html>
