@@ -99,6 +99,17 @@
 </div>
 
 <script>
+    // ================== LIMPIAR CONFIGURACIÓN ANTIGUA DE EMULATORJS ==================
+    // Esto evita el error "Cannot read properties of undefined (reading 'AL')"
+    try {
+        for (let key in localStorage) {
+            if (key.includes('EJS')) {
+                localStorage.removeItem(key);
+            }
+        }
+        console.log("Configuración antigua de EmulatorJS eliminada.");
+    } catch(e) { console.warn("No se pudo limpiar localStorage", e); }
+
     // ================== CATÁLOGO COMPLETO DE JUEGOS ==================
     const juegosDB = [
         // NES
@@ -250,7 +261,7 @@
     const iframe = document.getElementById('gameIframe');
     const closeModalBtn = document.getElementById('closeModalBtn');
 
-    // Función para abrir el emulador con las correcciones para Sega Genesis
+    // Función para abrir el emulador con todas las correcciones
     function abrirEmulador(sistema, romPath, gameTitle) {
         iframe.srcdoc = '';
         modal.style.display = 'flex';
@@ -286,12 +297,14 @@
                 window.EJS_player = "#game";
                 window.EJS_core = "${emuSystem}";
                 window.EJS_gameUrl = "${romUrl}";
-                // ===== CORRECCIONES PARA SEGA GENESIS Y OTRAS CONSOLAS =====
-                // 1. Usar la ruta estable de datos (evita errores de descarga de cores)
+                // ===== CONFIGURACIÓN DEFINITIVA =====
+                // Ruta estable de datos
                 window.EJS_pathtodata = "https://cdn.emulatorjs.org/stable/data/";
-                // 2. Forzar uso de cores antiguos (más compatibles con Genesis)
+                // Forzar cores antiguos (compatibilidad con Genesis)
                 window.EJS_oldCores = true;
-                // ===== FIN DE CORRECCIONES =====
+                // Desactivar localStorage para evitar errores de lectura de versiones anteriores
+                window.EJS_disableLocalStorage = true;
+                // Optimizaciones de rendimiento
                 window.EJS_autostart = true;
                 window.EJS_volume = 0.8;
                 window.EJS_language = "es-ES";
@@ -356,7 +369,7 @@
         });
     });
 
-    console.log("La Taberna de la Emulación - Catálogo completo cargado con correcciones para Sega Genesis.");
+    console.log("La Taberna de la Emulación - Código actualizado con limpieza de localStorage y correcciones.");
 </script>
 </body>
 </html>
