@@ -6,8 +6,11 @@
     <title>Archivo Retro - NES a N64</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:opsz,wght@14..32,300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Apuntamos a los archivos CSS y JS locales, dentro de nuestra carpeta 'data' -->
+    <link rel="stylesheet" href="data/emulator.min.css">
+    <script src="data/emulator.min.js"></script>
     <style>
-        /* Mantenemos tus estilos actualizados, igual que antes */
+        /* Tu CSS personalizado se mantiene igual */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: linear-gradient(145deg, #0a0f1e 0%, #0c1222 100%); font-family: 'Inter', sans-serif; color: #eef4ff; line-height: 1.5; padding-bottom: 3rem; }
         .welcome-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at center, #0b1120, #03060c); z-index: 2000; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(6px); transition: opacity 0.6s ease, visibility 0.6s; font-family: 'Press Start 2P', monospace; }
@@ -43,21 +46,13 @@
         .emulator-container { width: 100%; min-height: 480px; background: #000; position: relative; }
         footer { text-align: center; font-size: 0.75rem; margin-top: 2rem; padding: 1rem; color: #6f7c97; border-top: 1px solid #1f2a44; }
         @media (max-width: 700px) { .consoles-grid { grid-template-columns: 1fr; } .game-logo { width: 55px; height: 55px; } }
-        #emulatorContainer canvas, #emulatorContainer video {
-            width: 100% !important;
-            height: 100% !important;
-            object-fit: contain;
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-        #emulatorContainer {
-            position: relative;
-        }
+        #emulatorContainer canvas, #emulatorContainer video { width: 100% !important; height: 100% !important; object-fit: contain; position: absolute; top: 0; left: 0; }
+        #emulatorContainer { position: relative; }
     </style>
 </head>
 <body>
 
+<!-- Pantalla de bienvenida (sin sonido para simplificar) -->
 <div id="welcomeOverlay" class="welcome-overlay">
     <div class="welcome-card">
         <i class="fas fa-gamepad" style="font-size: 3rem; color:#ffb347; margin-bottom: 1rem;"></i>
@@ -99,12 +94,10 @@
     </div>
 </div>
 
-<!-- Cargar el loader moderno de EmulatorJS (API EJS) -->
-<script src="https://cdn.emulatorjs.org/stable/data/loader.js"></script>
-
 <script>
-    // Configuración GLOBAL del CDN (antes de que loader.js la necesite)
-    window.EJS_pathtodata = 'https://cdn.emulatorjs.org/stable/data/';
+    // --- Variables Globales y Configuración Inicial ---
+    // La ruta base de nuestros recursos locales
+    window.EJS_pathtodata = './data/';
     
     // ---------- CATÁLOGO DE JUEGOS ----------
     const juegosDB = [
@@ -185,23 +178,7 @@
     const emuContainer = document.getElementById('emulatorContainer');
     const closeModalBtn = document.getElementById('closeModalBtn');
 
-    // Esperar a que el loader cargue completamente
-    function waitForEJS() {
-        return new Promise((resolve) => {
-            if (typeof EJS !== 'undefined') {
-                resolve();
-                return;
-            }
-            const checkInterval = setInterval(() => {
-                if (typeof EJS !== 'undefined') {
-                    clearInterval(checkInterval);
-                    resolve();
-                }
-            }, 100);
-        });
-    }
-
-    async function abrirEmulador(sistema, romUrl, gameTitle) {
+    function abrirEmulador(sistema, romUrl, gameTitle) {
         // Limpiar instancia anterior y contenedor
         if (ejsInstance) {
             try { ejsInstance.destroy(); } catch(e) { console.warn("Error al destruir instancia anterior:", e); }
@@ -210,22 +187,10 @@
         emuContainer.innerHTML = '';
         modal.style.display = 'flex';
         modalTitle.innerHTML = `<i class="fas fa-gamepad"></i> Cargando núcleo para ${gameTitle}...`;
-        
-        // Ajustar altura del contenedor
         emuContainer.style.height = '0px';
-        setTimeout(() => {
-            emuContainer.style.height = '480px';
-        }, 10);
+        setTimeout(() => { emuContainer.style.height = '480px'; }, 10);
 
-        // Mapeo de sistemas
-        const systemMap = {
-            nes: 'nes',
-            snes: 'snes',
-            gb: 'gb',
-            gbc: 'gbc',
-            gba: 'gba',
-            n64: 'n64'
-        };
+        const systemMap = { nes: 'nes', snes: 'snes', gb: 'gb', gbc: 'gbc', gba: 'gba', n64: 'n64' };
         const emuSystem = systemMap[sistema];
         if (!emuSystem) {
             emuContainer.innerHTML = `<div style="color:red; padding:2rem;">Sistema no soportado: ${sistema}</div>`;
@@ -233,57 +198,30 @@
         }
 
         try {
-            // Esperar a que EJS esté disponible (asegura que loader.js haya cargado)
-            await waitForEJS();
-            
-            // Verificar que EJS está definido
-            if (typeof EJS === 'undefined') {
-                throw new Error('EJS no está disponible después de esperar. Verifica la carga de loader.js');
+            // Verificar que EmulatorJS esté cargado
+            if (typeof EmulatorJS === 'undefined') {
+                throw new Error('EmulatorJS no está disponible. Verifica que los archivos en la carpeta "data/" se hayan cargado correctamente.');
             }
             
-            // Configurar opciones globales antes de instanciar
-            window.EJS_gameUrl = romUrl;
-            window.EJS_core = emuSystem;
-            window.EJS_gameName = gameTitle;
-            window.EJS_player = '#emulatorContainer';
-            window.EJS_pathtodata = 'https://cdn.emulatorjs.org/stable/data/';
-            
-            // Configurar opciones adicionales para mejor compatibilidad
-            window.EJS_volume = 0.8;
-            window.EJS_autostart = true;
-            window.EJS_onGameStart = () => {
-                console.log('Juego iniciado correctamente');
-                modalTitle.innerHTML = `<i class="fas fa-gamepad"></i> Jugando: ${gameTitle}`;
-            };
-            window.EJS_onError = (error) => {
-                console.error('Error en emulador:', error);
-                const errorDiv = document.createElement('div');
-                errorDiv.style.background = '#aa2e2e';
-                errorDiv.style.padding = '1rem';
-                errorDiv.style.color = 'white';
-                errorDiv.style.borderRadius = '8px';
-                errorDiv.style.margin = '1rem';
-                errorDiv.innerHTML = `<strong>⚠️ Error al cargar el juego</strong><br>
-                    Detalles: ${error}<br>
-                    Asegúrate de que la ROM existe en <strong>${romUrl}</strong><br>
-                    Para N64, usa un archivo .zip con la ROM en formato .z64 dentro.
-                    <br><br>Para probar, intenta con un juego de NES primero.`;
-                emuContainer.appendChild(errorDiv);
-            };
-            
-            // Crear instancia del emulador
-            ejsInstance = new EJS(emuContainer);
-            await ejsInstance.start();
-            
-            // Asegurar que el contenedor mantenga el tamaño
-            const resizeObserver = new ResizeObserver(() => {
-                if (ejsInstance && ejsInstance.elements && ejsInstance.elements.canvas) {
-                    ejsInstance.elements.canvas.style.width = '100%';
-                    ejsInstance.elements.canvas.style.height = '100%';
+            // Configuración final para EmulatorJS
+            const options = {
+                gameUrl: window.location.origin,
+                system: emuSystem,
+                rom: romUrl,
+                dataPath: './data/',
+                onError: (error) => {
+                    console.error('Error en emulador:', error);
+                    emuContainer.innerHTML = `<div style="background:#aa2e2e; padding:1rem; margin:1rem; color:white; border-radius:8px;">
+                        <strong>⚠️ Error al cargar el juego</strong><br>
+                        Detalles: ${error}<br>
+                        Asegúrate de que la ROM existe en <strong>${romUrl}</strong> y está en el formato correcto.
+                    </div>`;
+                },
+                onStart: () => {
+                    modalTitle.innerHTML = `<i class="fas fa-gamepad"></i> Jugando: ${gameTitle}`;
                 }
-            });
-            resizeObserver.observe(emuContainer);
-            
+            };
+            ejsInstance = EmulatorJS.run(options);
         } catch(err) {
             console.error('Error crítico:', err);
             emuContainer.innerHTML = `<div style="padding:2rem; color:red;">
@@ -301,16 +239,12 @@
             ejsInstance = null;
         }
         emuContainer.innerHTML = '';
-        // Limpiar variables globales
-        delete window.EJS_gameUrl;
-        delete window.EJS_core;
-        delete window.EJS_gameName;
     }
 
     closeModalBtn.addEventListener('click', cerrarModal);
     modal.addEventListener('click', (e) => { if (e.target === modal) cerrarModal(); });
 
-    // Bienvenida
+    // --- Lógica de inicio ---
     const welcomeDiv = document.getElementById('welcomeOverlay');
     const mainContainer = document.getElementById('mainContent');
     const startButton = document.getElementById('startBtn');
@@ -319,10 +253,8 @@
         welcomeDiv.classList.add('hidden-overlay');
         mainContainer.style.display = 'block';
         renderCatalogo();
-        // Pequeño efecto de sonido si se desea (omitido por simplicidad)
     });
 
-    // Navegación rápida
     document.querySelectorAll('.console-badge').forEach(badge => {
         badge.addEventListener('click', () => {
             const cons = badge.getAttribute('data-console');
@@ -331,9 +263,7 @@
         });
     });
     
-    // Mostrar información de depuración en consola
-    console.log("Archivo Retro cargado. Prueba con un juego de NES primero para verificar el emulador.");
-    console.log("Para N64, asegúrate de usar un archivo .zip con la ROM en formato .z64 dentro.");
+    console.log("Archivo Retro listo con archivos locales.");
 </script>
 </body>
 </html>
