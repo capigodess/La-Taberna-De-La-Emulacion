@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:opsz,wght@14..32,300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* ===== ESTILOS PRINCIPALES ===== */
+        /* ===== ESTILOS CON FONDO OSCURO 45 GRADOS ===== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: linear-gradient(145deg, #0a0f1e 0%, #0c1222 100%); font-family: 'Inter', sans-serif; color: #eef4ff; line-height: 1.5; padding-bottom: 3rem; }
 
@@ -43,7 +43,7 @@
         }
         .console-card:hover { transform: translateY(-5px); box-shadow: 0 20px 30px -12px black; border-color: #ffb34766; }
 
-        /* Cabecera de la consola (sin cambio) */
+        /* Cabecera de la consola */
         .console-header { background: #0f172ad9; padding: 1rem 1.2rem; display: flex; align-items: center; gap: 12px; border-bottom: 2px solid #ffb347; }
         .console-header i { font-size: 2rem; color: #ffb347; }
         .console-header h3 { font-size: 1.6rem; font-weight: 700; letter-spacing: 1px; }
@@ -51,7 +51,7 @@
         /* Lista de juegos */
         .games-list { padding: 1rem; display: flex; flex-direction: column; gap: 1rem; }
 
-        /* Cada juego (fondo degradado oscuro 45deg más marcado) */
+        /* Cada juego (fondo degradado oscuro 135deg) */
         .game-item { 
             background: linear-gradient(135deg, #0d0d18, #05050c);
             border-radius: 1.2rem; 
@@ -151,7 +151,7 @@
 </div>
 
 <script>
-    // ================== CATÁLOGO DE JUEGOS (completo) ==================
+    // ================== CATÁLOGO DE JUEGOS (con Super Mario Kart añadido) ==================
     const juegosDB = [
         // NES
         { nombre: "Super Mario Bros.", sistema: "nes", romPath: "roms/nes/super_mario_bros.nes", logoUrl: "https://placehold.co/100x100/1e293b/ffb347?text=SMB" },
@@ -159,11 +159,12 @@
         { nombre: "Mega Man 2", sistema: "nes", romPath: "roms/nes/megaman2.nes", logoUrl: "https://placehold.co/100x100/1e293b/ffb347?text=MM2" },
         { nombre: "Castlevania", sistema: "nes", romPath: "roms/nes/castlevania.nes", logoUrl: "https://placehold.co/100x100/1e293b/ffb347?text=CV" },
         { nombre: "Metroid", sistema: "nes", romPath: "roms/nes/metroid.nes", logoUrl: "https://placehold.co/100x100/1e293b/ffb347?text=Metroid" },
-        // SNES
+        // SNES (incluye Super Mario Kart)
         { nombre: "Super Mario World", sistema: "snes", romPath: "roms/snes/smw.sfc", logoUrl: "https://placehold.co/100x100/1e293b/ffb347?text=SMW" },
         { nombre: "Zelda: A Link to the Past", sistema: "snes", romPath: "roms/snes/zelda_snes.sfc", logoUrl: "https://placehold.co/100x100/1e293b/ffb347?text=Zelda" },
         { nombre: "Super Metroid", sistema: "snes", romPath: "roms/snes/super_metroid.sfc", logoUrl: "https://placehold.co/100x100/1e293b/ffb347?text=Metroid" },
         { nombre: "Chrono Trigger", sistema: "snes", romPath: "roms/snes/chrono.sfc", logoUrl: "https://placehold.co/100x100/1e293b/ffb347?text=CT" },
+        { nombre: "Super Mario Kart", sistema: "snes", romPath: "roms/snes/super_mario_kart.sfc", logoUrl: "https://placehold.co/100x100/1e293b/ffb347?text=MKart" },
         // Game Boy
         { nombre: "Pokémon Red", sistema: "gb", romPath: "roms/gb/pokemon_red.gb", logoUrl: "https://placehold.co/100x100/1e293b/ffb347?text=Pokemon" },
         { nombre: "The Legend of Zelda: Link's Awakening", sistema: "gb", romPath: "roms/gb/zelda_dx.gb", logoUrl: "https://placehold.co/100x100/1e293b/ffb347?text=Zelda" },
@@ -178,7 +179,7 @@
         { nombre: "Super Mario 64", sistema: "n64", romPath: "roms/n64/sm64.zip", logoUrl: "https://placehold.co/100x100/1e293b/ffb347?text=SM64" },
         { nombre: "The Legend of Zelda: Ocarina of Time", sistema: "n64", romPath: "roms/n64/oot.zip", logoUrl: "https://placehold.co/100x100/1e293b/ffb347?text=OoT" },
         { nombre: "Mario Kart 64", sistema: "n64", romPath: "roms/n64/mk64.zip", logoUrl: "https://placehold.co/100x100/1e293b/ffb347?text=MK64" },
-        // Sega Mega Drive
+        // Sega Mega Drive (Genesis)
         { nombre: "Sonic the Hedgehog", sistema: "genesis", romPath: "roms/genesis/sonic.bin", logoUrl: "https://placehold.co/100x100/1e293b/ffb347?text=Sonic" },
         { nombre: "Streets of Rage 2", sistema: "genesis", romPath: "roms/genesis/streets2.bin", logoUrl: "https://placehold.co/100x100/1e293b/ffb347?text=SOR2" },
         { nombre: "Gunstar Heroes", sistema: "genesis", romPath: "roms/genesis/gunstar.bin", logoUrl: "https://placehold.co/100x100/1e293b/ffb347?text=Gunstar" },
@@ -191,7 +192,7 @@
         { nombre: "Virtua Racing", sistema: "sega32x", romPath: "roms/32x/vracing.32x", logoUrl: "https://placehold.co/100x100/1e293b/ffb347?text=Virtua" }
     ];
 
-    // Información de consolas
+    // Información de consolas (iconos y nombres)
     const consolasInfo = {
         nes: { nombre: "NES", icono: "fab fa-twitch", color: "#dd3b2b" },
         snes: { nombre: "SUPER NES", icono: "fab fa-superpowers", color: "#3b9eff" },
@@ -204,6 +205,7 @@
         sega32x: { nombre: "SEGA 32X", icono: "fas fa-microchip", color: "#ff6b6b" }
     };
 
+    // Función para obtener la URL base correcta
     function getBaseUrl() {
         let path = window.location.pathname;
         if (path.includes('/') && !path.endsWith('/')) {
@@ -213,6 +215,7 @@
         return window.location.origin + path;
     }
 
+    // Renderiza el catálogo en columnas
     function renderCatalogo() {
         const grid = document.getElementById('consolesGrid');
         if (!grid) return;
@@ -263,11 +266,13 @@
         });
     }
 
+    // Variables del modal
     const modal = document.getElementById('emulatorModal');
     const modalTitle = document.getElementById('modalGameTitle');
     const iframe = document.getElementById('gameIframe');
     const closeModalBtn = document.getElementById('closeModalBtn');
 
+    // Función para abrir el emulador con todas las optimizaciones de rendimiento
     function abrirEmulador(sistema, romPath, gameTitle) {
         iframe.srcdoc = '';
         modal.style.display = 'flex';
@@ -277,6 +282,7 @@
         let romUrl = romPath.startsWith('http') ? romPath : baseUrl + romPath;
         console.log("Cargando ROM:", romUrl);
 
+        // Mapeo de sistemas a identificadores de EmulatorJS
         const systemMap = {
             nes: 'nes', snes: 'snes', gb: 'gb', gbc: 'gbc', gba: 'gba', n64: 'n64',
             genesis: 'genesis', segacd: 'segacd', sega32x: 'sega32x'
@@ -303,6 +309,7 @@
         <body>
             <div id="game"></div>
             <script>
+                // === CONFIGURACIÓN DE EMULATORJS CON OPTIMIZACIONES ===
                 window.EJS_player = "#game";
                 window.EJS_core = "${emuSystem}";
                 window.EJS_gameUrl = "${romUrl}";
@@ -310,6 +317,12 @@
                 window.EJS_autostart = true;
                 window.EJS_volume = 0.8;
                 window.EJS_language = "es-ES";
+                
+                // === OPTIMIZACIONES DE RENDIMIENTO ===
+                window.EJS_vsync = false;           // Desactivar VSync (mejora fluidez)
+                window.EJS_max_ram = 512;            // Límite de memoria (MB)
+                window.EJS_frame_skip = 2;           // Salto de tramas (1-3 recomendado)
+                window.EJS_audio_buffer = 1024;      // Buffer de audio (evita cortes)
             <\/script>
             <script src="https://cdn.emulatorjs.org/stable/data/loader.js"><\/script>
         </body>
@@ -328,7 +341,7 @@
     closeModalBtn.addEventListener('click', cerrarModal);
     modal.addEventListener('click', (e) => { if (e.target === modal) cerrarModal(); });
 
-    // Sonido de inicio
+    // Sonido de inicio (sintetizado)
     let audioCtx = null;
     function playStartupSound() {
         try {
@@ -366,6 +379,7 @@
         } catch(e) { console.warn("Audio no soportado", e); }
     }
 
+    // Inicio de la aplicación
     const welcomeDiv = document.getElementById('welcomeOverlay');
     const mainContainer = document.getElementById('mainContent');
     const startButton = document.getElementById('startBtn');
@@ -377,6 +391,7 @@
         setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100);
     });
 
+    // Navegación rápida
     document.querySelectorAll('.console-badge').forEach(badge => {
         badge.addEventListener('click', () => {
             const cons = badge.getAttribute('data-console');
@@ -385,7 +400,7 @@
         });
     });
 
-    console.log("La Taberna de la Emulación está lista. ¡Que disfrutes!");
+    console.log("La Taberna de la Emulación está lista con optimizaciones de rendimiento. ¡Que disfrutes!");
 </script>
 </body>
 </html>
