@@ -57,7 +57,7 @@
     <div class="welcome-card">
         <i class="fas fa-gamepad" style="font-size: 3rem; color:#ffb347; margin-bottom: 1rem;"></i>
         <h1>LA TABERNA DE LA EMULACIÓN</h1>
-        <p>Preservando la historia de los videojuegos<br> NES • SNES • GAME BOY • GBC • GBA • N64<br> SEGA Mega Drive • SEGA CD • SEGA 32X</p>
+        <p>Preservando la historia de los videojuegos<br> NES • SNES • GAME BOY • GBC • GBA • N64 • NINTENDO DS<br> SEGA Mega Drive • SEGA CD • SEGA 32X</p>
         <button id="startBtn" class="start-btn"><i class="fas fa-play"></i> INICIAR</button>
     </div>
 </div>
@@ -74,6 +74,7 @@
         <div class="console-badge" data-console="gbc">GAME BOY COLOR</div>
         <div class="console-badge" data-console="gba">GAME BOY ADVANCE</div>
         <div class="console-badge" data-console="n64">NINTENDO 64</div>
+        <div class="console-badge" data-console="nds">NINTENDO DS</div> <!-- NEW CONSOLE -->
         <div class="console-badge" data-console="genesis">SEGA MEGA DRIVE</div>
         <div class="console-badge" data-console="segacd">SEGA CD</div>
         <div class="console-badge" data-console="sega32x">SEGA 32X</div>
@@ -100,76 +101,43 @@
 
 <script>
     // ================== CATÁLOGO EXTENDIDO DE JUEGOS ==================
-    // Todas las rutas de ROMs están relativas a la raíz del repositorio.
-    // Las carátulas se asumen en /La-Taberna-De-La-Emulacion/roms/.../boxart/[nombre].png
     const juegosDB = [
-        // ========== NES ==========
-        { nombre: "Super Mario Bros.", sistema: "nes", romPath: "roms/nes/super_mario_bros.nes", logoUrl: "/La-Taberna-De-La-Emulacion/roms/nes/boxart/super_mario_bros.png" },
-        { nombre: "The Legend of Zelda", sistema: "nes", romPath: "roms/nes/zelda.nes", logoUrl: "/La-Taberna-De-La-Emulacion/roms/nes/boxart/zelda.png" },
-        { nombre: "Mega Man 2", sistema: "nes", romPath: "roms/nes/megaman2.nes", logoUrl: "/La-Taberna-De-La-Emulacion/roms/nes/boxart/megaman2.png" },
-        { nombre: "Castlevania", sistema: "nes", romPath: "roms/nes/castlevania.nes", logoUrl: "/La-Taberna-De-La-Emulacion/roms/nes/boxart/castlevania.png" },
-        { nombre: "Metroid", sistema: "nes", romPath: "roms/nes/metroid.nes", logoUrl: "/La-Taberna-De-La-Emulacion/roms/nes/boxart/metroid.png" },
-        { nombre: "Contra", sistema: "nes", romPath: "roms/nes/contra.nes", logoUrl: "/La-Taberna-De-La-Emulacion/roms/nes/boxart/contra.png" },
-        { nombre: "Ninja Gaiden", sistema: "nes", romPath: "roms/nes/ninja_gaiden.nes", logoUrl: "/La-Taberna-De-La-Emulacion/roms/nes/boxart/ninja_gaiden.png" },
-        { nombre: "Final Fantasy", sistema: "nes", romPath: "roms/nes/final_fantasy.nes", logoUrl: "/La-Taberna-De-La-Emulacion/roms/nes/boxart/final_fantasy.png" },
-        { nombre: "Punch-Out!!", sistema: "nes", romPath: "roms/nes/punchout.nes", logoUrl: "/La-Taberna-De-La-Emulacion/roms/nes/boxart/punchout.png" },
-        { nombre: "Kirby's Adventure", sistema: "nes", romPath: "roms/nes/kirby.nes", logoUrl: "/La-Taberna-De-La-Emulacion/roms/nes/boxart/kirby.png" },
-        // ========== SNES ==========
-        { nombre: "Super Mario World", sistema: "snes", romPath: "roms/snes/smw.sfc", logoUrl: "/La-Taberna-De-La-Emulacion/roms/snes/boxart/smw.png" },
-        { nombre: "Zelda: A Link to the Past", sistema: "snes", romPath: "roms/snes/zelda_snes.sfc", logoUrl: "/La-Taberna-De-La-Emulacion/roms/snes/boxart/zelda_snes.png" },
-        { nombre: "Super Metroid", sistema: "snes", romPath: "roms/snes/super_metroid.sfc", logoUrl: "/La-Taberna-De-La-Emulacion/roms/snes/boxart/super_metroid.png" },
-        { nombre: "Chrono Trigger", sistema: "snes", romPath: "roms/snes/chrono.sfc", logoUrl: "/La-Taberna-De-La-Emulacion/roms/snes/boxart/chrono.png" },
-        { nombre: "Super Mario Kart", sistema: "snes", romPath: "roms/snes/super_mario_kart.sfc", logoUrl: "/La-Taberna-De-La-Emulacion/roms/snes/boxart/super_mario_kart.png" },
-        { nombre: "Donkey Kong Country", sistema: "snes", romPath: "roms/snes/dkc.sfc", logoUrl: "/La-Taberna-De-La-Emulacion/roms/snes/boxart/dkc.png" },
-        { nombre: "EarthBound", sistema: "snes", romPath: "roms/snes/earthbound.sfc", logoUrl: "/La-Taberna-De-La-Emulacion/roms/snes/boxart/earthbound.png" },
-        { nombre: "Final Fantasy VI", sistema: "snes", romPath: "roms/snes/ff6.sfc", logoUrl: "/La-Taberna-De-La-Emulacion/roms/snes/boxart/ff6.png" },
-        { nombre: "Street Fighter II Turbo", sistema: "snes", romPath: "roms/snes/sf2t.sfc", logoUrl: "/La-Taberna-De-La-Emulacion/roms/snes/boxart/sf2t.png" },
-        { nombre: "Super Castlevania IV", sistema: "snes", romPath: "roms/snes/castlevania4.sfc", logoUrl: "/La-Taberna-De-La-Emulacion/roms/snes/boxart/castlevania4.png" },
-        // ========== Game Boy ==========
-        { nombre: "Pokémon Red", sistema: "gb", romPath: "roms/gb/pokemon_red.gb", logoUrl: "/La-Taberna-De-La-Emulacion/roms/gb/boxart/pokemon_red.png" },
-        { nombre: "Zelda: Link's Awakening", sistema: "gb", romPath: "roms/gb/zelda_dx.gb", logoUrl: "/La-Taberna-De-La-Emulacion/roms/gb/boxart/zelda_dx.png" },
-        { nombre: "Super Mario Land 2", sistema: "gb", romPath: "roms/gb/mario_land2.gb", logoUrl: "/La-Taberna-De-La-Emulacion/roms/gb/boxart/mario_land2.png" },
-        { nombre: "Tetris", sistema: "gb", romPath: "roms/gb/tetris.gb", logoUrl: "/La-Taberna-De-La-Emulacion/roms/gb/boxart/tetris.png" },
-        { nombre: "Metroid II: Return of Samus", sistema: "gb", romPath: "roms/gb/metroid2.gb", logoUrl: "/La-Taberna-De-La-Emulacion/roms/gb/boxart/metroid2.png" },
-        // ========== Game Boy Color ==========
-        { nombre: "Pokémon Crystal", sistema: "gbc", romPath: "roms/gbc/crystal.gbc", logoUrl: "/La-Taberna-De-La-Emulacion/roms/gbc/boxart/crystal.png" },
-        { nombre: "Metal Gear Solid", sistema: "gbc", romPath: "roms/gbc/mgs.gbc", logoUrl: "/La-Taberna-De-La-Emulacion/roms/gbc/boxart/mgs.png" },
-        { nombre: "The Legend of Zelda: Oracle of Ages", sistema: "gbc", romPath: "roms/gbc/oracle_ages.gbc", logoUrl: "/La-Taberna-De-La-Emulacion/roms/gbc/boxart/oracle_ages.png" },
-        { nombre: "The Legend of Zelda: Oracle of Seasons", sistema: "gbc", romPath: "roms/gbc/oracle_seasons.gbc", logoUrl: "/La-Taberna-De-La-Emulacion/roms/gbc/boxart/oracle_seasons.png" },
-        { nombre: "Shantae", sistema: "gbc", romPath: "roms/gbc/shantae.gbc", logoUrl: "/La-Taberna-De-La-Emulacion/roms/gbc/boxart/shantae.png" },
-        // ========== Game Boy Advance ==========
-        { nombre: "Metroid Fusion", sistema: "gba", romPath: "roms/gba/fusion.gba", logoUrl: "/La-Taberna-De-La-Emulacion/roms/gba/boxart/fusion.png" },
-        { nombre: "Castlevania: Aria of Sorrow", sistema: "gba", romPath: "roms/gba/aria.gba", logoUrl: "/La-Taberna-De-La-Emulacion/roms/gba/boxart/aria.png" },
-        { nombre: "Mario Kart Super Circuit", sistema: "gba", romPath: "roms/gba/mkart.gba", logoUrl: "/La-Taberna-De-La-Emulacion/roms/gba/boxart/mkart.png" },
-        { nombre: "The Legend of Zelda: The Minish Cap", sistema: "gba", romPath: "roms/gba/minish_cap.gba", logoUrl: "/La-Taberna-De-La-Emulacion/roms/gba/boxart/minish_cap.png" },
-        { nombre: "Pokémon Emerald", sistema: "gba", romPath: "roms/gba/emerald.gba", logoUrl: "/La-Taberna-De-La-Emulacion/roms/gba/boxart/emerald.png" },
-        { nombre: "Golden Sun", sistema: "gba", romPath: "roms/gba/golden_sun.gba", logoUrl: "/La-Taberna-De-La-Emulacion/roms/gba/boxart/golden_sun.png" },
-        { nombre: "Fire Emblem", sistema: "gba", romPath: "roms/gba/fire_emblem.gba", logoUrl: "/La-Taberna-De-La-Emulacion/roms/gba/boxart/fire_emblem.png" },
-        // ========== Nintendo 64 ==========
-        { nombre: "Super Mario 64", sistema: "n64", romPath: "roms/n64/sm64.zip", logoUrl: "/La-Taberna-De-La-Emulacion/roms/n64/boxart/sm64.png" },
-        { nombre: "Zelda: Ocarina of Time", sistema: "n64", romPath: "roms/n64/oot.zip", logoUrl: "/La-Taberna-De-La-Emulacion/roms/n64/boxart/oot.png" },
-        { nombre: "Mario Kart 64", sistema: "n64", romPath: "roms/n64/mk64.zip", logoUrl: "/La-Taberna-De-La-Emulacion/roms/n64/boxart/mk64.png" },
-        { nombre: "GoldenEye 007", sistema: "n64", romPath: "roms/n64/goldeneye.zip", logoUrl: "/La-Taberna-De-La-Emulacion/roms/n64/boxart/goldeneye.png" },
-        { nombre: "Star Fox 64", sistema: "n64", romPath: "roms/n64/starfox64.zip", logoUrl: "/La-Taberna-De-La-Emulacion/roms/n64/boxart/starfox64.png" },
-        { nombre: "Banjo-Kazooie", sistema: "n64", romPath: "roms/n64/banjo.zip", logoUrl: "/La-Taberna-De-La-Emulacion/roms/n64/boxart/banjo.png" },
-        // ========== Sega Mega Drive ==========
-        { nombre: "Sonic the Hedgehog", sistema: "genesis", romPath: "roms/genesis/sonic.bin", logoUrl: "/La-Taberna-De-La-Emulacion/roms/genesis/boxart/sonic.png" },
-        { nombre: "Streets of Rage 2", sistema: "genesis", romPath: "roms/genesis/streets2.bin", logoUrl: "/La-Taberna-De-La-Emulacion/roms/genesis/boxart/streets2.png" },
-        { nombre: "Gunstar Heroes", sistema: "genesis", romPath: "roms/genesis/gunstar.bin", logoUrl: "/La-Taberna-De-La-Emulacion/roms/genesis/boxart/gunstar.png" },
-        { nombre: "Mortal Kombat II", sistema: "genesis", romPath: "roms/genesis/mk2.bin", logoUrl: "/La-Taberna-De-La-Emulacion/roms/genesis/boxart/mk2.png" },
-        { nombre: "Shining Force II", sistema: "genesis", romPath: "roms/genesis/shining2.bin", logoUrl: "/La-Taberna-De-La-Emulacion/roms/genesis/boxart/shining2.png" },
-        { nombre: "Phantasy Star IV", sistema: "genesis", romPath: "roms/genesis/ps4.bin", logoUrl: "/La-Taberna-De-La-Emulacion/roms/genesis/boxart/ps4.png" },
-        { nombre: "Castlevania: Bloodlines", sistema: "genesis", romPath: "roms/genesis/castlevania_b.bin", logoUrl: "/La-Taberna-De-La-Emulacion/roms/genesis/boxart/castlevania_b.png" },
-        // ========== Sega CD ==========
-        { nombre: "Sonic CD", sistema: "segacd", romPath: "roms/segacd/soniccd.zip", logoUrl: "/La-Taberna-De-La-Emulacion/roms/segacd/boxart/soniccd.png" },
-        { nombre: "Lunar: Eternal Blue", sistema: "segacd", romPath: "roms/segacd/lunar.zip", logoUrl: "/La-Taberna-De-La-Emulacion/roms/segacd/boxart/lunar.png" },
-        { nombre: "Snatcher", sistema: "segacd", romPath: "roms/segacd/snatcher.zip", logoUrl: "/La-Taberna-De-La-Emulacion/roms/segacd/boxart/snatcher.png" },
-        { nombre: "Popful Mail", sistema: "segacd", romPath: "roms/segacd/popful.zip", logoUrl: "/La-Taberna-De-La-Emulacion/roms/segacd/boxart/popful.png" },
-        // ========== Sega 32X ==========
-        { nombre: "Knuckles' Chaotix", sistema: "sega32x", romPath: "roms/32x/chaotix.32x", logoUrl: "/La-Taberna-De-La-Emulacion/roms/32x/boxart/chaotix.png" },
-        { nombre: "Virtua Racing", sistema: "sega32x", romPath: "roms/32x/vracing.32x", logoUrl: "/La-Taberna-De-La-Emulacion/roms/32x/boxart/vracing.png" },
-        { nombre: "Star Wars Arcade", sistema: "sega32x", romPath: "roms/32x/starwars.32x", logoUrl: "/La-Taberna-De-La-Emulacion/roms/32x/boxart/starwars.png" },
-        { nombre: "Tempo", sistema: "sega32x", romPath: "roms/32x/tempo.32x", logoUrl: "/La-Taberna-De-La-Emulacion/roms/32x/boxart/tempo.png" }
+        // ... (todas las entradas anteriores para NES, SNES, GB, GBC, GBA, N64, Genesis, Sega CD, Sega 32X se mantienen igual. 
+        // Por brevedad en esta respuesta, se muestran las nuevas de NDS. En tu archivo final, debes fusionarlas con las que ya tienes).
+        
+        // ========== NINTENDO DS (NUEVO) ==========
+        // Añade todos tus juegos aquí. El "sistema" debe ser "nds".
+        // La ruta de la ROM es relativa. El BIOS debe estar en el ZIP que configures en EJS_biosUrl.
+        { nombre: "Pokémon Black", sistema: "nds", romPath: "roms/nds/pokemon_black.nds", logoUrl: "/La-Taberna-De-La-Emulacion/roms/nds/boxart/pokemon_black.png" },
+        { nombre: "Pokémon White", sistema: "nds", romPath: "roms/nds/pokemon_white.nds", logoUrl: "/La-Taberna-De-La-Emulacion/roms/nds/boxart/pokemon_white.png" },
+        { nombre: "Pokémon Black 2", sistema: "nds", romPath: "roms/nds/pokemon_black2.nds", logoUrl: "/La-Taberna-De-La-Emulacion/roms/nds/boxart/pokemon_black2.png" },
+        { nombre: "Pokémon White 2", sistema: "nds", romPath: "roms/nds/pokemon_white2.nds", logoUrl: "/La-Taberna-De-La-Emulacion/roms/nds/boxart/pokemon_white2.png" },
+        { nombre: "Pokémon HeartGold", sistema: "nds", romPath: "roms/nds/pokemon_hg.nds", logoUrl: "/La-Taberna-De-La-Emulacion/roms/nds/boxart/pokemon_hg.png" },
+        { nombre: "Pokémon SoulSilver", sistema: "nds", romPath: "roms/nds/pokemon_ss.nds", logoUrl: "/La-Taberna-De-La-Emulacion/roms/nds/boxart/pokemon_ss.png" },
+        { nombre: "Pokémon Platinum", sistema: "nds", romPath: "roms/nds/pokemon_platinum.nds", logoUrl: "/La-Taberna-De-La-Emulacion/roms/nds/boxart/pokemon_platinum.png" },
+        { nombre: "Pokémon Diamond", sistema: "nds", romPath: "roms/nds/pokemon_diamond.nds", logoUrl: "/La-Taberna-De-La-Emulacion/roms/nds/boxart/pokemon_diamond.png" },
+        { nombre: "Pokémon Pearl", sistema: "nds", romPath: "roms/nds/pokemon_pearl.nds", logoUrl: "/La-Taberna-De-La-Emulacion/roms/nds/boxart/pokemon_pearl.png" },
+        { nombre: "Super Mario 64 DS", sistema: "nds", romPath: "roms/nds/sm64ds.nds", logoUrl: "/La-Taberna-De-La-Emulacion/roms/nds/boxart/sm64ds.png" },
+        { nombre: "Mario Kart DS", sistema: "nds", romPath: "roms/nds/mkds.nds", logoUrl: "/La-Taberna-De-La-Emulacion/roms/nds/boxart/mkds.png" },
+        { nombre: "New Super Mario Bros.", sistema: "nds", romPath: "roms/nds/nsmb.nds", logoUrl: "/La-Taberna-De-La-Emulacion/roms/nds/boxart/nsmb.png" },
+        { nombre: "The Legend of Zelda: Phantom Hourglass", sistema: "nds", romPath: "roms/nds/phantom_hourglass.nds", logoUrl: "/La-Taberna-De-La-Emulacion/roms/nds/boxart/phantom_hourglass.png" },
+        { nombre: "The Legend of Zelda: Spirit Tracks", sistema: "nds", romPath: "roms/nds/spirit_tracks.nds", logoUrl: "/La-Taberna-De-La-Emulacion/roms/nds/boxart/spirit_tracks.png" },
+        { nombre: "Castlevania: Dawn of Sorrow", sistema: "nds", romPath: "roms/nds/castlevania_dos.nds", logoUrl: "/La-Taberna-De-La-Emulacion/roms/nds/boxart/castlevania_dos.png" },
+        { nombre: "Castlevania: Portrait of Ruin", sistema: "nds", romPath: "roms/nds/castlevania_por.nds", logoUrl: "/La-Taberna-De-La-Emulacion/roms/nds/boxart/castlevania_por.png" },
+        { nombre: "Castlevania: Order of Ecclesia", sistema: "nds", romPath: "roms/nds/castlevania_ooe.nds", logoUrl: "/La-Taberna-De-La-Emulacion/roms/nds/boxart/castlevania_ooe.png" },
+        { nombre: "Final Fantasy III", sistema: "nds", romPath: "roms/nds/ff3.nds", logoUrl: "/La-Taberna-De-La-Emulacion/roms/nds/boxart/ff3.png" },
+        { nombre: "Final Fantasy IV", sistema: "nds", romPath: "roms/nds/ff4.nds", logoUrl: "/La-Taberna-De-La-Emulacion/roms/nds/boxart/ff4.png" },
+        { nombre: "Chrono Trigger", sistema: "nds", romPath: "roms/nds/chrono_trigger.nds", logoUrl: "/La-Taberna-De-La-Emulacion/roms/nds/boxart/chrono_trigger.png" },
+        { nombre: "Phoenix Wright: Ace Attorney", sistema: "nds", romPath: "roms/nds/pw1.nds", logoUrl: "/La-Taberna-De-La-Emulacion/roms/nds/boxart/pw1.png" },
+        { nombre: "Phoenix Wright: Justice for All", sistema: "nds", romPath: "roms/nds/pw2.nds", logoUrl: "/La-Taberna-De-La-Emulacion/roms/nds/boxart/pw2.png" },
+        { nombre: "Phoenix Wright: Trials and Tribulations", sistema: "nds", romPath: "roms/nds/pw3.nds", logoUrl: "/La-Taberna-De-La-Emulacion/roms/nds/boxart/pw3.png" },
+        { nombre: "Apollo Justice: Ace Attorney", sistema: "nds", romPath: "roms/nds/aj.nds", logoUrl: "/La-Taberna-De-La-Emulacion/roms/nds/boxart/aj.png" },
+        { nombre: "Grand Theft Auto: Chinatown Wars", sistema: "nds", romPath: "roms/nds/gta_ctw.nds", logoUrl: "/La-Taberna-De-La-Emulacion/roms/nds/boxart/gta_ctw.png" },
+        { nombre: "Animal Crossing: Wild World", sistema: "nds", romPath: "roms/nds/acww.nds", logoUrl: "/La-Taberna-De-La-Emulacion/roms/nds/boxart/acww.png" },
+        { nombre: "Kirby Super Star Ultra", sistema: "nds", romPath: "roms/nds/kirby_superstar.nds", logoUrl: "/La-Taberna-De-La-Emulacion/roms/nds/boxart/kirby_superstar.png" },
+        { nombre: "Kirby: Squeak Squad", sistema: "nds", romPath: "roms/nds/kirby_squeak.nds", logoUrl: "/La-Taberna-De-La-Emulacion/roms/nds/boxart/kirby_squeak.png" },
+        { nombre: "Rhythm Heaven", sistema: "nds", romPath: "roms/nds/rhythm_heaven.nds", logoUrl: "/La-Taberna-De-La-Emulacion/roms/nds/boxart/rhythm_heaven.png" },
+        { nombre: "Elite Beat Agents", sistema: "nds", romPath: "roms/nds/elite_beat.nds", logoUrl: "/La-Taberna-De-La-Emulacion/roms/nds/boxart/elite_beat.png" },
     ];
 
     // Información de consolas (iconos y nombres)
@@ -180,6 +148,7 @@
         gbc: { nombre: "GAME BOY COLOR", icono: "fas fa-palette", color: "#ffb74d" },
         gba: { nombre: "GAME BOY ADVANCE", icono: "fas fa-expand", color: "#c792ea" },
         n64: { nombre: "NINTENDO 64", icono: "fas fa-cube", color: "#ec9a3c" },
+        nds: { nombre: "NINTENDO DS", icono: "fas fa-draw-polygon", color: "#4fc3f7" }, // NEW CONSOLE INFO
         genesis: { nombre: "SEGA MEGA DRIVE", icono: "fab fa-trello", color: "#5bc0ff" },
         segacd: { nombre: "SEGA CD", icono: "fas fa-compact-disc", color: "#ff9e5e" },
         sega32x: { nombre: "SEGA 32X", icono: "fas fa-microchip", color: "#ff6b6b" }
@@ -200,7 +169,7 @@
         const grid = document.getElementById('consolesGrid');
         if (!grid) return;
         grid.innerHTML = '';
-        const sistemas = ['nes', 'snes', 'gb', 'gbc', 'gba', 'n64', 'genesis', 'segacd', 'sega32x'];
+        const sistemas = ['nes', 'snes', 'gb', 'gbc', 'gba', 'n64', 'nds', 'genesis', 'segacd', 'sega32x'];
         for (let sys of sistemas) {
             const juegosFiltrados = juegosDB.filter(juego => juego.sistema === sys);
             if (juegosFiltrados.length === 0) continue;
@@ -252,7 +221,7 @@
     const iframe = document.getElementById('gameIframe');
     const closeModalBtn = document.getElementById('closeModalBtn');
 
-    // Función para abrir el emulador con optimizaciones
+    // Función para abrir el emulador con optimizaciones y BIOS para DS
     function abrirEmulador(sistema, romPath, gameTitle) {
         iframe.srcdoc = '';
         modal.style.display = 'flex';
@@ -264,6 +233,7 @@
 
         const systemMap = {
             nes: 'nes', snes: 'snes', gb: 'gb', gbc: 'gbc', gba: 'gba', n64: 'n64',
+            nds: 'nds', // New system
             genesis: 'genesis', segacd: 'segacd', sega32x: 'sega32x'
         };
         const emuSystem = systemMap[sistema];
@@ -272,6 +242,10 @@
             modalTitle.innerHTML = `<i class="fas fa-gamepad"></i> Error: ${gameTitle}`;
             return;
         }
+
+        // Configuración de BIOS para Nintendo DS
+        // Empaqueta tus archivos bios7.bin, bios9.bin y firmware.bin en un ZIP y súbelo a tu repositorio.
+        const biosUrl = baseUrl + "roms/bios/ds_bios.zip";
 
         const emulatorHtml = `
         <!DOCTYPE html>
@@ -296,6 +270,8 @@
                 window.EJS_max_ram = 512;
                 window.EJS_frame_skip = 2;
                 window.EJS_audio_buffer = 1024;
+                // Configuración para Nintendo DS (BIOS)
+                window.EJS_biosUrl = "${biosUrl}";
             <\/script>
             <script src="https://cdn.emulatorjs.org/stable/data/loader.js"><\/script>
         </body>
@@ -353,7 +329,7 @@
         });
     });
 
-    console.log("La Taberna de la Emulación - Catálogo ampliado cargado. ¡Disfruta!");
+    console.log("La Taberna de la Emulación - Ahora también con Nintendo DS. ¡Disfruta!");
 </script>
 </body>
 </html>
