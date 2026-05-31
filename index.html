@@ -270,7 +270,7 @@
     const iframe = document.getElementById('gameIframe');
     const closeModalBtn = document.getElementById('closeModalBtn');
 
-    // Función para abrir el emulador (sin optimizaciones específicas para N64)
+    // Función para abrir el emulador con la configuración CORRECTA (estable y oldCores)
     function abrirEmulador(sistema, romPath, gameTitle) {
         iframe.srcdoc = '';
         modal.style.display = 'flex';
@@ -292,7 +292,7 @@
             return;
         }
 
-        // Configuración de BIOS para PS1
+        // Configuración de BIOS para PS1 (opcional, si tienes los archivos en la ruta)
         let biosConfig = '';
         if (sistema === 'psx') {
             biosConfig = `window.EJS_biosUrl = "${baseUrl}roms/psx/bios/";`;
@@ -310,16 +310,22 @@
         <body>
             <div id="game"></div>
             <script>
+                // === CONFIGURACIÓN OBLIGATORIA PARA QUE FUNCIONE GENESIS Y OTRAS ===
                 window.EJS_player = "#game";
                 window.EJS_core = "${emuSystem}";
                 window.EJS_gameUrl = "${romUrl}";
+                // Ruta de datos estable (CDN oficial)
                 window.EJS_pathtodata = "https://cdn.emulatorjs.org/stable/data/";
+                // Forzar uso de cores antiguos (necesario para Genesis y otros)
                 window.EJS_oldCores = true;
+                // Desactivar localStorage para evitar errores de versiones antiguas
                 window.EJS_disableLocalStorage = true;
                 ${biosConfig}
+                // Configuración general
                 window.EJS_autostart = true;
                 window.EJS_volume = 0.8;
                 window.EJS_language = "es-ES";
+                // Optimizaciones ligeras (no causan problemas)
                 window.EJS_vsync = false;
                 window.EJS_max_ram = 512;
                 window.EJS_frame_skip = 2;
@@ -381,7 +387,7 @@
         });
     });
 
-    console.log("La Taberna de la Emulación - Optimizaciones para N64 eliminadas. Los juegos deberían funcionar sin errores.");
+    console.log("La Taberna de la Emulación - Configuración corregida: EJS_pathtodata estable, EJS_oldCores=true, optimizaciones N64 eliminadas.");
 </script>
 </body>
 </html>
