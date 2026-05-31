@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>La Taberna de la Emulación - Catálogo Completo</title>
+    <title>La Taberna de la Emulación - Catálogo Completo con PS1</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:opsz,wght@14..32,300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* ===== ESTILOS ===== */
+        /* ===== ESTILOS (MANTENER IGUAL QUE ANTES) ===== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: linear-gradient(145deg, #0a0f1e 0%, #0c1222 100%); font-family: 'Inter', sans-serif; color: #eef4ff; line-height: 1.5; padding-bottom: 3rem; }
         .welcome-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at center, #0b1120, #03060c); z-index: 2000; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(6px); transition: opacity 0.6s ease, visibility 0.6s; font-family: 'Press Start 2P', monospace; }
@@ -19,7 +19,7 @@
         .header { text-align: center; padding: 2rem 1rem 1rem; border-bottom: 2px solid #2a3650; background: rgba(8,12,24,0.7); backdrop-filter: blur(4px); }
         .header h2 { font-family: 'Press Start 2P', monospace; color: #ffcd7e; font-size: 1.4rem; }
         .console-nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem; margin: 1.5rem 1rem; }
-        .console-badge { background: #1e293b; padding: 0.5rem 1rem; border-radius: 40px; font-weight: bold; font-size: 0.8rem; font-family: monospace; border-left: 4px solid #ffb347; cursor: pointer; color: #cbd5e6; }
+        .console-badge { background: #1e293b; padding: 0.5rem 1rem; border-radius: 40px; font-weight: bold; font-size: 0.8rem; font-family: monospace; border-left: 4px solid #ffb347; cursor: pointer; color: #cbd5e6; transition: all 0.2s; }
         .console-badge:hover { background: #2d3b54; transform: scale(1.02); color: white; }
         .consoles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem; padding: 1.5rem; max-width: 1600px; margin: 0 auto; }
         .console-card { background: linear-gradient(45deg, #0a0a14, #11111f); backdrop-filter: blur(4px); border-radius: 1.8rem; border: 1px solid #2a3440; overflow: hidden; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 8px 20px rgba(0,0,0,0.4); }
@@ -52,12 +52,11 @@
 </head>
 <body>
 
-<!-- Pantalla de bienvenida -->
 <div id="welcomeOverlay" class="welcome-overlay">
     <div class="welcome-card">
         <i class="fas fa-gamepad" style="font-size: 3rem; color:#ffb347; margin-bottom: 1rem;"></i>
         <h1>LA TABERNA DE LA EMULACIÓN</h1>
-        <p>Preservando la historia de los videojuegos<br> NES • SNES • GAME BOY • GBC • GBA • N64<br> SEGA Mega Drive • SEGA CD • SEGA 32X</p>
+        <p>Preservando la historia de los videojuegos<br> NES • SNES • GAME BOY • GBC • GBA • N64 • PlayStation 1<br> SEGA Mega Drive • SEGA CD • SEGA 32X</p>
         <button id="startBtn" class="start-btn"><i class="fas fa-play"></i> INICIAR</button>
     </div>
 </div>
@@ -74,6 +73,7 @@
         <div class="console-badge" data-console="gbc">GAME BOY COLOR</div>
         <div class="console-badge" data-console="gba">GAME BOY ADVANCE</div>
         <div class="console-badge" data-console="n64">NINTENDO 64</div>
+        <div class="console-badge" data-console="psx">PLAYSTATION 1</div>
         <div class="console-badge" data-console="genesis">SEGA MEGA DRIVE</div>
         <div class="console-badge" data-console="segacd">SEGA CD</div>
         <div class="console-badge" data-console="sega32x">SEGA 32X</div>
@@ -84,7 +84,6 @@
     </footer>
 </main>
 
-<!-- Modal con iframe -->
 <div id="emulatorModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
@@ -99,7 +98,7 @@
 </div>
 
 <script>
-    // ================== LIMPIAR CONFIGURACIÓN ANTIGUA DE EMULATORJS ==================
+    // ================== LIMPIAR CONFIGURACIÓN ANTIGUA ==================
     try {
         for (let key in localStorage) {
             if (key.includes('EJS')) {
@@ -109,7 +108,7 @@
         console.log("Configuración antigua de EmulatorJS eliminada.");
     } catch(e) { console.warn("No se pudo limpiar localStorage", e); }
 
-    // ================== CATÁLOGO COMPLETO DE JUEGOS (NOMBRES NORMALIZADOS) ==================
+    // ================== CATÁLOGO DE JUEGOS (CON PS1 Y METROID ZERO MISSION) ==================
     const juegosDB = [
         // ---------- NES ----------
         { nombre: "Super Mario Bros.", sistema: "nes", romPath: "roms/nes/super_mario_bros.nes", logoUrl: "/La-Taberna-De-La-Emulacion/roms/nes/boxart/super_mario_bros.png" },
@@ -147,6 +146,7 @@
         { nombre: "Shantae", sistema: "gbc", romPath: "roms/gbc/shantae.gbc", logoUrl: "/La-Taberna-De-La-Emulacion/roms/gbc/boxart/shantae.png" },
         // ---------- Game Boy Advance ----------
         { nombre: "Metroid Fusion", sistema: "gba", romPath: "roms/gba/metroid_fusion.gba", logoUrl: "/La-Taberna-De-La-Emulacion/roms/gba/boxart/metroid_fusion.png" },
+        { nombre: "Metroid Zero Mission", sistema: "gba", romPath: "roms/gba/metroid_zero_mission.gba", logoUrl: "/La-Taberna-De-La-Emulacion/roms/gba/boxart/metroid_zero_mission.png" },  // NUEVO
         { nombre: "Castlevania: Aria of Sorrow", sistema: "gba", romPath: "roms/gba/castlevania_aria_of_sorrow.gba", logoUrl: "/La-Taberna-De-La-Emulacion/roms/gba/boxart/castlevania_aria_of_sorrow.png" },
         { nombre: "Mario Kart Super Circuit", sistema: "gba", romPath: "roms/gba/mario_kart_super_circuit.gba", logoUrl: "/La-Taberna-De-La-Emulacion/roms/gba/boxart/mario_kart_super_circuit.png" },
         { nombre: "Zelda: The Minish Cap", sistema: "gba", romPath: "roms/gba/zelda_minish_cap.gba", logoUrl: "/La-Taberna-De-La-Emulacion/roms/gba/boxart/zelda_minish_cap.png" },
@@ -160,6 +160,15 @@
         { nombre: "GoldenEye 007", sistema: "n64", romPath: "roms/n64/goldeneye_007.zip", logoUrl: "/La-Taberna-De-La-Emulacion/roms/n64/boxart/goldeneye_007.png" },
         { nombre: "Star Fox 64", sistema: "n64", romPath: "roms/n64/star_fox_64.zip", logoUrl: "/La-Taberna-De-La-Emulacion/roms/n64/boxart/star_fox_64.png" },
         { nombre: "Banjo-Kazooie", sistema: "n64", romPath: "roms/n64/banjo_kazooie.zip", logoUrl: "/La-Taberna-De-La-Emulacion/roms/n64/boxart/banjo_kazooie.png" },
+        // ---------- PlayStation 1 ----------
+        { nombre: "Final Fantasy VII", sistema: "psx", romPath: "roms/psx/final_fantasy_vii.zip", logoUrl: "/La-Taberna-De-La-Emulacion/roms/psx/boxart/final_fantasy_vii.png" },
+        { nombre: "Metal Gear Solid", sistema: "psx", romPath: "roms/psx/metal_gear_solid.zip", logoUrl: "/La-Taberna-De-La-Emulacion/roms/psx/boxart/metal_gear_solid.png" },
+        { nombre: "Castlevania: Symphony of the Night", sistema: "psx", romPath: "roms/psx/castlevania_sotn.zip", logoUrl: "/La-Taberna-De-La-Emulacion/roms/psx/boxart/castlevania_sotn.png" },
+        { nombre: "Resident Evil 2", sistema: "psx", romPath: "roms/psx/resident_evil_2.zip", logoUrl: "/La-Taberna-De-La-Emulacion/roms/psx/boxart/resident_evil_2.png" },
+        { nombre: "Tony Hawk's Pro Skater 2", sistema: "psx", romPath: "roms/psx/tony_hawk_2.zip", logoUrl: "/La-Taberna-De-La-Emulacion/roms/psx/boxart/tony_hawk_2.png" },
+        { nombre: "Tekken 3", sistema: "psx", romPath: "roms/psx/tekken_3.zip", logoUrl: "/La-Taberna-De-La-Emulacion/roms/psx/boxart/tekken_3.png" },
+        { nombre: "Spyro the Dragon", sistema: "psx", romPath: "roms/psx/spyro_the_dragon.zip", logoUrl: "/La-Taberna-De-La-Emulacion/roms/psx/boxart/spyro_the_dragon.png" },
+        { nombre: "Crash Bandicoot 3: Warped", sistema: "psx", romPath: "roms/psx/crash_bandicoot_3.zip", logoUrl: "/La-Taberna-De-La-Emulacion/roms/psx/boxart/crash_bandicoot_3.png" },
         // ---------- Sega Mega Drive ----------
         { nombre: "Sonic the Hedgehog", sistema: "genesis", romPath: "roms/genesis/sonic_the_hedgehog.bin", logoUrl: "/La-Taberna-De-La-Emulacion/roms/genesis/boxart/sonic_the_hedgehog.png" },
         { nombre: "Streets of Rage 2", sistema: "genesis", romPath: "roms/genesis/streets_of_rage_2.bin", logoUrl: "/La-Taberna-De-La-Emulacion/roms/genesis/boxart/streets_of_rage_2.png" },
@@ -180,7 +189,7 @@
         { nombre: "Tempo", sistema: "sega32x", romPath: "roms/32x/tempo.32x", logoUrl: "/La-Taberna-De-La-Emulacion/roms/32x/boxart/tempo.png" }
     ];
 
-    // Información de consolas
+    // Información de consolas (incluyendo PS1)
     const consolasInfo = {
         nes: { nombre: "NES", icono: "fab fa-twitch", color: "#dd3b2b" },
         snes: { nombre: "SUPER NES", icono: "fab fa-superpowers", color: "#3b9eff" },
@@ -188,6 +197,7 @@
         gbc: { nombre: "GAME BOY COLOR", icono: "fas fa-palette", color: "#ffb74d" },
         gba: { nombre: "GAME BOY ADVANCE", icono: "fas fa-expand", color: "#c792ea" },
         n64: { nombre: "NINTENDO 64", icono: "fas fa-cube", color: "#ec9a3c" },
+        psx: { nombre: "PLAYSTATION 1", icono: "fab fa-playstation", color: "#00b4d8" },
         genesis: { nombre: "SEGA MEGA DRIVE", icono: "fab fa-trello", color: "#5bc0ff" },
         segacd: { nombre: "SEGA CD", icono: "fas fa-compact-disc", color: "#ff9e5e" },
         sega32x: { nombre: "SEGA 32X", icono: "fas fa-microchip", color: "#ff6b6b" }
@@ -203,12 +213,12 @@
         return window.location.origin + path;
     }
 
-    // Renderiza el catálogo
+    // Renderiza el catálogo en columnas
     function renderCatalogo() {
         const grid = document.getElementById('consolesGrid');
         if (!grid) return;
         grid.innerHTML = '';
-        const sistemas = ['nes', 'snes', 'gb', 'gbc', 'gba', 'n64', 'genesis', 'segacd', 'sega32x'];
+        const sistemas = ['nes', 'snes', 'gb', 'gbc', 'gba', 'n64', 'psx', 'genesis', 'segacd', 'sega32x'];
         for (let sys of sistemas) {
             const juegosFiltrados = juegosDB.filter(juego => juego.sistema === sys);
             if (juegosFiltrados.length === 0) continue;
@@ -260,7 +270,7 @@
     const iframe = document.getElementById('gameIframe');
     const closeModalBtn = document.getElementById('closeModalBtn');
 
-    // Función para abrir el emulador
+    // Función para abrir el emulador (con optimizaciones para N64)
     function abrirEmulador(sistema, romPath, gameTitle) {
         iframe.srcdoc = '';
         modal.style.display = 'flex';
@@ -272,13 +282,32 @@
 
         const systemMap = {
             nes: 'nes', snes: 'snes', gb: 'gb', gbc: 'gbc', gba: 'gba', n64: 'n64',
+            psx: 'psx',
             genesis: 'genesis', segacd: 'segacd', sega32x: 'sega32x'
         };
-        const emuSystem = systemMap[sistema];
+        let emuSystem = systemMap[sistema];
         if (!emuSystem) {
             iframe.srcdoc = `<html><body style="color:white; background:black; text-align:center; padding:2rem;">Sistema no soportado: ${sistema}</body></html>`;
             modalTitle.innerHTML = `<i class="fas fa-gamepad"></i> Error: ${gameTitle}`;
             return;
+        }
+
+        // Optimización específica para N64
+        let extraConfig = "";
+        if (sistema === "n64") {
+            emuSystem = "mupen64plus_next_libretro";  // Core más optimizado
+            extraConfig = `
+                window.EJS_threads = 2;
+                window.EJS_upscale = 1;
+                window.EJS_forceUpscale = false;
+                window.EJS_textureFiltering = false;
+            `;
+        }
+
+        // Configuración de BIOS para PS1
+        let biosConfig = '';
+        if (sistema === 'psx') {
+            biosConfig = `window.EJS_biosUrl = "${baseUrl}roms/psx/bios/";`;
         }
 
         const emulatorHtml = `
@@ -296,10 +325,10 @@
                 window.EJS_player = "#game";
                 window.EJS_core = "${emuSystem}";
                 window.EJS_gameUrl = "${romUrl}";
-                // ===== CONFIGURACIÓN DEFINITIVA =====
                 window.EJS_pathtodata = "https://cdn.emulatorjs.org/stable/data/";
                 window.EJS_oldCores = true;
                 window.EJS_disableLocalStorage = true;
+                ${biosConfig}
                 window.EJS_autostart = true;
                 window.EJS_volume = 0.8;
                 window.EJS_language = "es-ES";
@@ -307,6 +336,7 @@
                 window.EJS_max_ram = 512;
                 window.EJS_frame_skip = 2;
                 window.EJS_audio_buffer = 1024;
+                ${extraConfig}
             <\/script>
             <script src="https://cdn.emulatorjs.org/stable/data/loader.js"><\/script>
         </body>
@@ -364,7 +394,7 @@
         });
     });
 
-    console.log("La Taberna de la Emulación - Nombres de ROMs y carátulas normalizados.");
+    console.log("La Taberna de la Emulación - Catálogo actualizado con Metroid Zero Mission y optimizaciones N64.");
 </script>
 </body>
 </html>
