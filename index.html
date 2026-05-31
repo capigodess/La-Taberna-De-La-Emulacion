@@ -292,17 +292,17 @@
             return;
         }
 
-        // Optimización específica para N64
-        let extraConfig = "";
-        if (sistema === "n64") {
-            emuSystem = "mupen64plus_next_libretro";  // Core más optimizado
-            extraConfig = `
-                window.EJS_threads = 2;
-                window.EJS_upscale = 1;
-                window.EJS_forceUpscale = false;
-                window.EJS_textureFiltering = false;
-            `;
-        }
+// Optimización específica para N64
+let extraConfig = "";
+if (sistema === "n64") {
+    emuSystem = "mupen64plus_next_libretro";
+    extraConfig = `
+        // window.EJS_threads = 2;  // <--- COMENTA O ELIMINA ESTA LÍNEA
+        window.EJS_upscale = 1;
+        window.EJS_forceUpscale = false;
+        window.EJS_textureFiltering = false;
+    `;
+}
 
         // Configuración de BIOS para PS1
         let biosConfig = '';
